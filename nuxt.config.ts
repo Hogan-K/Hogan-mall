@@ -33,7 +33,7 @@ export default defineNuxtConfig({
     },
     extras: {
       font: 'roboto-font',
-      fontIcons: ['material-icons'],
+      fontIcons: ['fontawesome-v6'],
       animations: 'all'
     },
     sassVariables: true
