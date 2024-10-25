@@ -1,3 +1,25 @@
 {
-  "helloWorld": "你好世界"
+  "home": "首頁",
+  "membersArea": "會員專區",
+  "latestProducts": "最新商品",
+  "top": "上衣類",
+  "topAll": "上衣全系列",
+  "shirt": "襯衫",
+  "knit": "針織",
+  "vest": "背心",
+  "outer": "外套類",
+  "outerAll": "外套全系列",
+  "blazer": "西裝外套",
+  "overcoat": "大衣",
+  "jacket": "夾克",
+  "bottom": "下身類",
+  "bottomAll": "下身全系列",
+  "slacks": "休閒褲",
+  "jeans": "牛仔褲",
+  "pants": "短褲",
+  "acc": "配件類",
+  "accAll": "配件全系列",
+  "bag": "包包",
+  "shoes": "鞋子",
+  "hat": "帽子"
 }
