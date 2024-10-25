@@ -29,7 +29,7 @@ const search = ref(null)
     </QInput>
 
     <QBtn flat round class="icon-btn q-mr-sm" icon="perm_identity" size="16px" color="dark" />
-    <QBtn flat round class="icon-btn q-mr-sm" icon="favorite_border" size="16px" color="dark" />
+    <QBtn flat round class="icon-btn q-mr-sm" icon="bookmarks" size="16px" color="dark" />
     <QBtn flat dense round class="icon-btn" icon="local_mall" size="16px" color="dark">
       <QBadge transparent floating label="1" />
     </QBtn>
