@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
 
-const path = route.path.startsWith('/') ? route.path.slice(1) : route.path
+const guideMapItemList = route.path.split('/')
+//  因為切完 path 後，index[0] 會是空字串，所以刪除 index[0]
+guideMapItemList.shift()
 const guideMap = ref([])
-guideMap.value.push(path)
+guideMap.value.push(...guideMapItemList)
 if (route.query.keyword) {
   guideMap.value.push(route.query.keyword)
 }
