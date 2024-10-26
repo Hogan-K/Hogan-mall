@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const drawerSwitch = defineModel<Boolean>({ type: Boolean })
+const drawerSwitch: boolean = defineModel({ type: Boolean })
 
 const search = ref(null)
 </script>
@@ -8,7 +8,7 @@ const search = ref(null)
   <QToolbar>
     <QBtn flat round color="primary" icon="menu"  @click="drawerSwitch = !drawerSwitch" />
     <NuxtLink to="/">
-      <QImg src="img/logo.png" alt="logo" sizes="50px" :ratio="1" style="width: 100px" />
+      <QImg src="/img/logo.png" alt="logo" sizes="50px" :ratio="1" style="width: 100px" />
     </NuxtLink>
 
     <QSpace />
