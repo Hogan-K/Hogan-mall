@@ -18,8 +18,9 @@ defineProps({
   <div class="row q-col-gutter-lg q-px-xl">
     <div v-for="(item, index) in productList" :key="index" class="col-6 col-sm-3">
       <QCard flat>
-        <QCardSection class="full-height">
-          <QImg fit="contain" :src="item.image" :alt="item.title" :ratio="9/16">
+        <QCardSection class="full-height relative-position q-pa-none">
+          <NuxtLink :to="`/products/${item.title}`">
+            <QImg class="z-fab product-img-block" fit="contain" :src="item.image" :alt="item.title" :ratio="9/16">
             <template #loading>
               <q-spinner-cube color="primary" />
             </template>
@@ -27,6 +28,8 @@ defineProps({
               <QImg class="bg-transparent" fit="contain" src="img/logo.png" alt="default-image" :ratio="9/16" />
             </template>
           </QImg>
+          </NuxtLink>
+          <QBtn class="add-cart-btn absolute absolute-center" color="secondary" label="add cart" />
         </QCardSection>
 
         <QCardSection class="bg-accent text-dark">
@@ -47,5 +50,13 @@ defineProps({
 <style scoped lang="scss">
 .cancel-line {
   text-decoration: line-through;
+}
+
+.add-cart-btn:hover {
+  z-index: 1000 !important;
+}
+
+.product-img-block:hover {
+  z-index: 0 !important;
 }
 </style>
