@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const store = useStore()
+
 const scrollValue = ref(0)
 onMounted(() => {
   window.onscroll = () => {
@@ -16,6 +18,8 @@ const productList = ref([
   { title: 'CCC', image: 'img/default-product-image.jpg', price: 1000 },
   { title: 'DDD', image: 'img/default-product-image.jpg', price: 1000 }
 ])
+
+const page = ref(1)
 </script>
 
 <template>
@@ -29,6 +33,18 @@ const productList = ref([
         <QBtn round color="primary" icon="fa-solid fa-arrow-up" @click="scrollToTOP()" />
       </QPageSticky>
     </Transition>
+
+    <QPagination
+        v-model="page"
+        direction-links
+        boundary-links
+        class="q-my-lg justify-center"
+        gutter="10px"
+        color="grey"
+        active-color="primary"
+        max="10"
+        :max-pages="store.screenWidth <= 600 ? 3 : 10"
+    />
   </QPage>
 </template>
 
