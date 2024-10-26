@@ -2,47 +2,48 @@
 const listActiveValue = ref<null|string>(null)
 
 const sideBarList = ref([
-  { title: 'home', icon: 'home' },
-  { title: 'membersArea', icon: 'perm_identity' },
-  { title: 'latestProducts', icon: 'local_fire_department' },
+  { title: 'home', icon: 'home', to: '/' },
+  { title: 'membersArea', icon: 'perm_identity', to: '/' },
+  { title: 'latestProducts', icon: 'local_fire_department', to: '/' },
+  { title: 'allProducts', icon: 'fa-solid fa-border-all', to: '/products' },
   {
     title: 'top',
     icon: 'bookmarks',
     classify: [
-      { title: 'topAll', icon: 'turned_in_not' },
-      { title: 'shirt', icon: 'turned_in_not' },
-      { title: 'knit', icon: 'turned_in_not' },
-      { title: 'vest', icon: 'turned_in_not' }
+      { title: 'topAll', icon: 'turned_in_not', to: '/' },
+      { title: 'shirt', icon: 'turned_in_not', to: '/' },
+      { title: 'knit', icon: 'turned_in_not', to: '/' },
+      { title: 'vest', icon: 'turned_in_not', to: '/' }
     ]
   },
   {
     title: 'outer',
     icon: 'bookmarks',
     classify: [
-      { title: 'outerAll', icon: 'turned_in_not' },
-      { title: 'blazer', icon: 'turned_in_not' },
-      { title: 'overcoat', icon: 'turned_in_not' },
-      { title: 'jacket', icon: 'turned_in_not' }
+      { title: 'outerAll', icon: 'turned_in_not', to: '/' },
+      { title: 'blazer', icon: 'turned_in_not', to: '/' },
+      { title: 'overcoat', icon: 'turned_in_not', to: '/' },
+      { title: 'jacket', icon: 'turned_in_not', to: '/' }
     ]
   },
   {
     title: 'bottom',
     icon: 'bookmarks',
     classify: [
-      { title: 'bottomAll', icon: 'turned_in_not' },
-      { title: 'slacks', icon: 'turned_in_not' },
-      { title: 'jeans', icon: 'turned_in_not' },
-      { title: 'pants', icon: 'turned_in_not' }
+      { title: 'bottomAll', icon: 'turned_in_not', to: '/' },
+      { title: 'slacks', icon: 'turned_in_not', to: '/' },
+      { title: 'jeans', icon: 'turned_in_not', to: '/' },
+      { title: 'pants', icon: 'turned_in_not', to: '/' }
     ]
   },
   {
     title: 'acc',
     icon: 'bookmarks',
     classify: [
-      { title: 'accAll', icon: 'turned_in_not' },
-      { title: 'bag', icon: 'turned_in_not' },
-      { title: 'shoes', icon: 'turned_in_not' },
-      { title: 'hat', icon: 'turned_in_not' }
+      { title: 'accAll', icon: 'turned_in_not', to: '/' },
+      { title: 'bag', icon: 'turned_in_not', to: '/' },
+      { title: 'shoes', icon: 'turned_in_not', to: '/' },
+      { title: 'hat', icon: 'turned_in_not', to: '/' }
     ]
   }
 ])
@@ -51,14 +52,14 @@ const sideBarList = ref([
 <template>
   <QScrollArea class="fit">
     <QList focused padding bordered>
-      <template v-for="(item, index) in sideBarList">
+      <div v-for="(item, index) in sideBarList" :key="index">
         <QItem
             v-if="!(item.classify)"
             v-ripple
             clickable
             active-class="list-active-class"
             :active="listActiveValue === item.title"
-            :key="index"
+            :to="item.to"
             @click="listActiveValue = item.title"
         >
           <QItemSection avatar>
@@ -82,6 +83,7 @@ const sideBarList = ref([
                 v-ripple
                 clickable
                 active-class="list-active-class"
+                :to="classifyItem.to"
                 :active="listActiveValue === classifyItem.title"
                 @click="listActiveValue = classifyItem.title"
             >
@@ -94,7 +96,7 @@ const sideBarList = ref([
             </QItem>
           </QList>
         </QExpansionItem>
-      </template>
+      </div>
     </QList>
   </QScrollArea>
 </template>
