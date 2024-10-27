@@ -19,7 +19,7 @@ defineProps({
     <div v-for="(item, index) in productList" :key="index" class="col-6 col-sm-3">
       <QCard flat>
         <QCardSection class="full-height relative-position q-pa-none">
-          <NuxtLink :to="`/products/${item.title}`">
+          <NuxtLink :to="`products/${item.title}`">
             <QImg class="z-fab product-img-block" fit="contain" :src="item.image" :alt="item.title" :ratio="9/16">
             <template #loading>
               <q-spinner-cube color="primary" />
