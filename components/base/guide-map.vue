@@ -12,7 +12,7 @@ if (route.query.keyword) {
 </script>
 
 <template>
-  <QBreadcrumbs class="q-pa-xl text-primary" active-color="dark">
+  <QBreadcrumbs class="q-pa-lg text-primary" active-color="dark">
     <template #separator>
       <QIcon name="fa-solid fa-angle-right" color="dark" />
     </template>
