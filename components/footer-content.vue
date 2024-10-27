@@ -7,7 +7,7 @@ const langList = locales.value.map(item => item.code)
 const footerLinkBtn = [
   { title: 'aboutUs' },
   { title: 'membersArea' },
-  { title: 'contactUs' }
+  { title: 'contact-us', to: '/contact-us' }
 ]
 
 const socialAppBtnList = [
@@ -27,6 +27,7 @@ const socialAppBtnList = [
           flat
           :class="{ 'footer-btn' : index !== footerLinkBtn.length - 1 }"
           :label="$t(item.title)"
+          :to="item.to"
       />
     </div>
 

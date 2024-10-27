@@ -24,5 +24,8 @@
   "shoes": "鞋子",
   "hat": "帽子",
   "aboutUs": "關於我們",
-  "contactUs": "聯絡我們"
+  "contact-us": "聯絡我們",
+  "address": "地址",
+  "email": "E-mail",
+  "customer_service": "客服"
 }
