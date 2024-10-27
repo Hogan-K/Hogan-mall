@@ -1,49 +1,51 @@
 <script setup lang="ts">
+const { t } = useI18n()
+
 const listActiveValue = ref<null|string>(null)
 
 const sideBarList = ref([
   { title: 'home', icon: 'home', to: '/' },
-  { title: 'membersArea', icon: 'perm_identity', to: '/' },
-  { title: 'latestProducts', icon: 'local_fire_department', to: '/' },
-  { title: 'allProducts', icon: 'fa-solid fa-border-all', to: '/products' },
+  { title: 'members_area', icon: 'perm_identity', to: '/' },
+  { title: 'latest_products', icon: 'local_fire_department', to: `/products?keyword=${t('latest_products')}` },
+  { title: 'all_products', icon: 'fa-solid fa-border-all', to: '/products' },
   {
     title: 'top',
     icon: 'bookmarks',
     classify: [
-      { title: 'topAll', icon: 'turned_in_not', to: '/' },
-      { title: 'shirt', icon: 'turned_in_not', to: '/' },
-      { title: 'knit', icon: 'turned_in_not', to: '/' },
-      { title: 'vest', icon: 'turned_in_not', to: '/' }
+      { title: 'top_all', icon: 'turned_in_not', to: `/products?keyword=${t('top_all')}` },
+      { title: 'shirt', icon: 'turned_in_not', to: `/products?keyword=${t('shirt')}` },
+      { title: 'knit', icon: 'turned_in_not', to: `/products?keyword=${t('knit')}` },
+      { title: 'vest', icon: 'turned_in_not', to: `/products?keyword=${t('vest')}` }
     ]
   },
   {
     title: 'outer',
     icon: 'bookmarks',
     classify: [
-      { title: 'outerAll', icon: 'turned_in_not', to: '/' },
-      { title: 'blazer', icon: 'turned_in_not', to: '/' },
-      { title: 'overcoat', icon: 'turned_in_not', to: '/' },
-      { title: 'jacket', icon: 'turned_in_not', to: '/' }
+      { title: 'outer_all', icon: 'turned_in_not', to: `/products?keyword=${t('outer_all')}` },
+      { title: 'blazer', icon: 'turned_in_not', to: `/products?keyword=${t('blazer')}` },
+      { title: 'overcoat', icon: 'turned_in_not', to: `/products?keyword=${t('overcoat')}` },
+      { title: 'jacket', icon: 'turned_in_not', to: `/products?keyword=${t('jacket')}` }
     ]
   },
   {
     title: 'bottom',
     icon: 'bookmarks',
     classify: [
-      { title: 'bottomAll', icon: 'turned_in_not', to: '/' },
-      { title: 'slacks', icon: 'turned_in_not', to: '/' },
-      { title: 'jeans', icon: 'turned_in_not', to: '/' },
-      { title: 'pants', icon: 'turned_in_not', to: '/' }
+      { title: 'bottom_all', icon: 'turned_in_not', to: `/products?keyword=${t('bottom_all')}` },
+      { title: 'slacks', icon: 'turned_in_not', to: `/products?keyword=${t('slacks')}` },
+      { title: 'jeans', icon: 'turned_in_not', to: `/products?keyword=${t('jeans')}` },
+      { title: 'pants', icon: 'turned_in_not', to: `/products?keyword=${t('pants')}` }
     ]
   },
   {
     title: 'acc',
     icon: 'bookmarks',
     classify: [
-      { title: 'accAll', icon: 'turned_in_not', to: '/' },
-      { title: 'bag', icon: 'turned_in_not', to: '/' },
-      { title: 'shoes', icon: 'turned_in_not', to: '/' },
-      { title: 'hat', icon: 'turned_in_not', to: '/' }
+      { title: 'acc_all', icon: 'turned_in_not', to: `/products?keyword=${t('acc_all')}` },
+      { title: 'bag', icon: 'turned_in_not', to: `/products?keyword=${t('bag')}` },
+      { title: 'shoes', icon: 'turned_in_not', to: `/products?keyword=${t('shoes')}` },
+      { title: 'hat', icon: 'turned_in_not', to: `/products?keyword=${t('hat')}` }
     ]
   }
 ])

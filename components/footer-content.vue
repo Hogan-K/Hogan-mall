@@ -5,9 +5,9 @@ const localLang = ref<string>(locale.value)
 const langList = locales.value.map(item => item.code)
 
 const footerLinkBtn = [
-  { title: 'aboutUs' },
-  { title: 'membersArea' },
-  { title: 'contact-us', to: '/contact-us' }
+  { title: 'about_us' },
+  { title: 'members_area' },
+  { title: 'contact_us', to: '/contact-us' }
 ]
 
 const socialAppBtnList = [
