@@ -13,21 +13,24 @@ const scrollToTOP = () => {
 }
 
 const productList = ref([
-  { title: 'BBB', image: 'img/default-product-image.jpg', price: 1000 },
-  { title: 'CCC', image: 'img/default-product-image.jpg', price: 1000 },
-  { title: 'CCC', image: 'img/default-product-image.jpg', price: 1000 },
-  { title: 'DDD', image: 'img/default-product-image.jpg', price: 1000 }
+  { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
+  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
+  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
+  { title: 'DDD', image: 'https://cdn.quasar.dev/img/mountdsaains.jpg', price: 1000 }
 ])
 
 const page = ref(1)
 </script>
 
 <template>
-  <QPage>
+  <QPage class="q-pa-xl">
     <Base-guide-map />
 
-    <base-card :product-list="productList" />
-
+    <div class="row q-col-gutter-lg q-px-xl">
+      <div v-for="(item, index) in productList" :key="index" class="col-6 col-sm-3">
+        <base-card :product-info="item" />
+      </div>
+    </div>
     <Transition>
       <QPageSticky v-if="scrollValue >= 300" position="bottom-right" :offset="[30, 18]">
         <QBtn round color="primary" icon="fa-solid fa-arrow-up" @click="scrollToTOP()" />
