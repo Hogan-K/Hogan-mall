@@ -16,7 +16,7 @@ defineProps({
 
 <template>
   <QCard flat>
-    <QCardSection class="full-height relative-position q-pa-none">
+    <QCardSection class="full-height relative-position q-pa-none overflow-hidden">
       <NuxtLink :to="`/products/${productInfo.title}`">
         <QImg class="z-fab product-img-block" fit="contain" :src="productInfo.image" :alt="productInfo.title" :ratio="9/16">
         <template #loading>
@@ -27,7 +27,7 @@ defineProps({
         </template>
       </QImg>
       </NuxtLink>
-      <QBtn class="add-cart-btn absolute absolute-center" color="secondary" label="add cart" />
+      <QBtn class="add-cart-btn absolute absolute-center" color="secondary" :label="$t('add_cart')" />
     </QCardSection>
 
     <QCardSection class="bg-accent text-dark">
@@ -48,7 +48,11 @@ defineProps({
   z-index: 1000 !important;
 }
 
-.product-img-block:hover {
-  z-index: 0 !important;
+.product-img-block {
+  transition: 0.5s;
+  &:hover {
+    z-index: 0 !important;
+    transform: scale(1.1);
+  }
 }
 </style>
