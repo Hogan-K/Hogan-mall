@@ -1,0 +1,197 @@
+<script setup lang="ts">
+const { required, name, cellphone, email } = baseInput()
+const route = useRoute()
+const router = useRouter()
+const store = useStore()
+
+const tab = ref('')
+tab.value = route.query.type?? 'account'
+watch(tab, (val) => {
+  router.push({ path: route.path, query: { type: val } })
+})
+watch(() => route.query, (val) => {
+  tab.value = val.type
+})
+
+
+// account block
+const accountInfo = ref({
+  name: '',
+  cellphone: '',
+  email: '',
+  gender: '',
+  birthday: ''
+})
+
+const rules = { name, cellphone, email }
+const genderSelectOption = [
+  'male',
+  'female'
+]
+
+const form = ref(null)
+const onSave = () => {
+  form.value.validate().then(res => {
+    if (res) {
+      console.log('call api')
+    } else {
+      console.log(res)
+    }
+  })
+}
+const editPassword = () => {
+  console.log('改密碼')
+}
+
+// order_record block
+const orderInfo  = ref([])
+const myCoupons = ref([
+  { title: '週年慶', introduce: 'happyhappyhappyhappy', code: '' },
+  { title: '黑色星期五', introduce: 'happyhappyhappy', code: '' }
+])
+
+// collection block
+const collection = ref([
+  { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
+  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
+  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
+  { title: 'DDD', image: 'https://cdn.quasar.dev/img/mountdsaains.jpg', price: 1000 }
+])
+
+const page = ref(1)
+</script>
+
+<template>
+  <QPage>
+    <QTabs v-model="tab" inline-label active-color="primary" align="justify">
+      <QTab name="account" label="會員資訊" icon="fa-regular fa-user" />
+      <QTab name="order_record" label="訂購記錄" icon="fa-solid fa-clipboard" />
+      <QTab name="coupons" label="優惠券" icon="fa-solid fa-ticket" />
+      <QTab name="collection" label="我的收藏" icon="fa-solid fa-book-bookmark" />
+    </QTabs>
+
+    <QTabPanels v-model="tab" animated class="bg-accent">
+      <QTabPanel name="account">
+        <QForm ref="form" class="flex justify-center bg-accent q-pa-md" @submit="onSave()">
+          <div>
+            <template v-for="(key, index) in Object.keys(accountInfo)" :key="index">
+              <QInput
+                  v-if="key === 'birthday'"
+                  v-model="accountInfo[key]"
+                  outlined
+                  rounded
+                  dense
+                  width="300px"
+                  mask="date"
+                  :label="key"
+                  :rules="[required, rules[key]]"
+              >
+                <template #append>
+                  <q-icon name="event" class="cursor-pointer">
+                    <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                      <q-date v-model="accountInfo[key]">
+                        <div class="row items-center justify-end">
+                          <q-btn v-close-popup label="Close" color="primary" flat />
+                        </div>
+                      </q-date>
+                    </q-popup-proxy>
+                  </q-icon>
+                </template>
+              </QInput>
+              <QSelect
+                  v-else-if="key === 'gender'"
+                  v-model="accountInfo[key]"
+                  outlined
+                  rounded
+                  dense
+                  label="gender"
+                  :options="genderSelectOption"
+                  :rules="[required]"
+              />
+              <Base-input
+                  v-else
+                  v-model="accountInfo[key]"
+                  width="300px"
+                  :label="key"
+                  :rules="[required, rules[key]]"
+              />
+            </template>
+            <QBtn class="full-width" color="primary" type="submit" label="save" />
+            <QBtn flat class="float-right" label="改密碼" color="secondary" @click="editPassword()" />
+          </div>
+        </QForm>
+      </QTabPanel>
+      <QTabPanel name="order_record">
+        <QCard class="q-mb-md">
+          <QCardSection v-for="(item, index) in orderInfo" :key="index" class="row">
+            <div class="col-12">
+              <p>編號 : {{ item.number }} <span class="q-ml-lg">訂購日期 : {{ item.date }}</span></p>
+            </div>
+            <div class="col-4 q-pa-md">
+              <QImg :src="item.image" alt="product-image" fit="contain" height="100px" />
+            </div>
+            <div class="col-8 flex justify-around items-center">
+              <p :class="{ 'text-warning' : item.payment_status === 'unpaid' }">{{ $t(item.payment_status) }}</p>
+              <p :class="{ 'text-warning' : item.logistics_status === 'not_shipped' }">{{ $t(item.logistics_status) }}</p>
+              <p>總金額： $NT {{ item.total_price }}</p>
+            </div>
+          </QCardSection>
+        </QCard>
+      </QTabPanel>
+      <QTabPanel name="coupons">
+        <div class="row q-mt-lg">
+          <div v-for="(item, index) in myCoupons" :key="index" class="col-12 col-sm-6 q-pa-xs">
+            <QCard class="coupon-card overflow-hidden full-height">
+              <QCardSection class="q-pa-none full-height">
+                <div class="row full-height">
+                  <div class="col-3 flex flex-center bg-primary">
+                    <QIcon class="coupon-icon" name="fa-solid fa-ticket" color="accent" size="md" />
+                  </div>
+                  <div class="col-6 q-pa-xs text-dark introduce-block">
+                    <p class="text-center text-weight-medium text-size-4">{{ item.title }}</p>
+                    <p>使用說明 : {{ item.introduce }}</p>
+                  </div>
+                  <div class="col-3 bg-primary">
+                    <QBtn flat class="fit" label="use" text-color="accent" />
+                  </div>
+                </div>
+              </QCardSection>
+            </QCard>
+          </div>
+        </div>
+      </QTabPanel>
+      <QTabPanel name="collection">
+        <div class="row q-pa-md">
+          <div v-for="(item, index) in collection" :key="index" class="col-6 col-sm-3 q-pa-sm">
+            <Base-card :product-info="item" />
+          </div>
+        </div>
+        <QPagination
+            v-model="page"
+            direction-links
+            boundary-links
+            class="q-my-lg justify-center"
+            gutter="10px"
+            color="grey"
+            active-color="primary"
+            max="10"
+            :max-pages="store.screenWidth <= 600 ? 3 : 10"
+        />
+      </QTabPanel>
+    </QTabPanels>
+  </QPage>
+</template>
+
+<style scoped lang="scss">
+.coupon-card {
+  border-radius: 10px;
+
+  .coupon-icon {
+    transform: rotate(165deg);
+  }
+
+  .introduce-block {
+    word-break: break-word;
+  }
+}
+</style>

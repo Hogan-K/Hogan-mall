@@ -1,6 +1,6 @@
 {
   "home": "首頁",
-  "members_area": "會員專區",
+  "member_area": "會員專區",
   "latest_products": "最新商品",
   "all_products": "全部商品",
   "top": "上衣類",
@@ -53,6 +53,10 @@
   "credit_card_cvc": "授權碼",
   "credit_card": "信用卡",
   "cash_on_delivery": "貨到付款",
+  "paid": "已付款",
+  "unpaid": "未付款",
+  "shipped": "已出貨",
+  "not_shipped": "未出貨",
   "input_rule_error": "格式錯誤",
   "required": "必填",
   "please_choose_product": "請選擇商品",
