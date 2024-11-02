@@ -64,10 +64,10 @@ const page = ref(1)
 <template>
   <QPage>
     <QTabs v-model="tab" inline-label active-color="primary" align="justify">
-      <QTab name="account" label="會員資訊" icon="fa-regular fa-user" />
-      <QTab name="order_record" label="訂購記錄" icon="fa-solid fa-clipboard" />
-      <QTab name="coupons" label="優惠券" icon="fa-solid fa-ticket" />
-      <QTab name="collection" label="我的收藏" icon="fa-solid fa-book-bookmark" />
+      <QTab name="account" icon="fa-regular fa-user" :label="$t('account_info')" />
+      <QTab name="order_record" icon="fa-solid fa-clipboard" :label="$t('order_record')" />
+      <QTab name="coupons" icon="fa-solid fa-ticket" :label="$t('coupons')" />
+      <QTab name="collection" icon="fa-solid fa-book-bookmark" :label="$t('collection')" />
     </QTabs>
 
     <QTabPanels v-model="tab" animated class="bg-accent">
@@ -83,7 +83,7 @@ const page = ref(1)
                   dense
                   width="300px"
                   mask="date"
-                  :label="key"
+                  :label="$t(key)"
                   :rules="[required, rules[key]]"
               >
                 <template #append>
@@ -104,7 +104,7 @@ const page = ref(1)
                   outlined
                   rounded
                   dense
-                  label="gender"
+                  :label="$t('gender')"
                   :options="genderSelectOption"
                   :rules="[required]"
               />
@@ -112,12 +112,12 @@ const page = ref(1)
                   v-else
                   v-model="accountInfo[key]"
                   width="300px"
-                  :label="key"
+                  :label="$t(key)"
                   :rules="[required, rules[key]]"
               />
             </template>
-            <QBtn class="full-width" color="primary" type="submit" label="save" />
-            <QBtn flat class="float-right" label="改密碼" color="secondary" @click="editPassword()" />
+            <QBtn class="full-width" color="primary" type="submit" :label="$t('save')" />
+            <QBtn flat class="float-right" color="secondary" :label="$t('change_password')" @click="editPassword()" />
           </div>
         </QForm>
       </QTabPanel>
@@ -125,7 +125,7 @@ const page = ref(1)
         <QCard class="q-mb-md">
           <QCardSection v-for="(item, index) in orderInfo" :key="index" class="row">
             <div class="col-12">
-              <p>編號 : {{ item.number }} <span class="q-ml-lg">訂購日期 : {{ item.date }}</span></p>
+              <p>{{ `${$t('number')} : ${item.number}` }} <span class="q-ml-lg">{{ `${$t('purchase_date')} : ${item.date}` }}</span></p>
             </div>
             <div class="col-4 q-pa-md">
               <QImg :src="item.image" alt="product-image" fit="contain" height="100px" />
@@ -133,7 +133,7 @@ const page = ref(1)
             <div class="col-8 flex justify-around items-center">
               <p :class="{ 'text-warning' : item.payment_status === 'unpaid' }">{{ $t(item.payment_status) }}</p>
               <p :class="{ 'text-warning' : item.logistics_status === 'not_shipped' }">{{ $t(item.logistics_status) }}</p>
-              <p>總金額： $NT {{ item.total_price }}</p>
+              <p>{{ `${$t('total_price')} : $NT ${item.total_price}` }}</p>
             </div>
           </QCardSection>
         </QCard>
@@ -149,10 +149,10 @@ const page = ref(1)
                   </div>
                   <div class="col-6 q-pa-xs text-dark introduce-block">
                     <p class="text-center text-weight-medium text-size-4">{{ item.title }}</p>
-                    <p>使用說明 : {{ item.introduce }}</p>
+                    <p>{{ `${$t('instructions_for_use')} : ${item.introduce}` }}</p>
                   </div>
                   <div class="col-3 bg-primary">
-                    <QBtn flat class="fit" label="use" text-color="accent" />
+                    <QBtn flat class="fit" text-color="accent" :label="$t('use')" />
                   </div>
                 </div>
               </QCardSection>
