@@ -18,7 +18,7 @@ defineProps({
   <QCard flat>
     <QCardSection class="full-height relative-position q-pa-none overflow-hidden">
       <NuxtLink :to="`/products/${productInfo.title}`">
-        <QImg class="z-fab product-img-block" fit="contain" :src="productInfo.image" :alt="productInfo.title" :ratio="9/16">
+        <QImg class="product-img-block" fit="contain" :src="productInfo.image" :alt="productInfo.title" :ratio="9/16">
         <template #loading>
           <q-spinner-cube color="primary" />
         </template>
@@ -45,10 +45,11 @@ defineProps({
 
 <style scoped lang="scss">
 .add-cart-btn:hover {
-  z-index: 1000 !important;
+  z-index: 2 !important;
 }
 
 .product-img-block {
+  z-index: 1;
   transition: 0.5s;
   &:hover {
     z-index: 0 !important;

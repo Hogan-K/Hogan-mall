@@ -11,6 +11,17 @@ onMounted(() => {
     drawerSwitch.value = true
   }
 })
+
+onMounted(() => {
+  window.onscroll = () => {
+
+    store.GET_SCREEN_HEIGHT(scrollY)
+  }
+})
+
+const scrollToTOP = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 </script>
 
 <template>
@@ -29,6 +40,28 @@ onMounted(() => {
 
     <QPageContainer class="bg-accent">
       <slot />
+      <Transition>
+        <QPageSticky v-if="store.screenHeight >= 300" class="z-top" position="bottom-right" :offset="[30, 18]">
+          <QBtn round color="primary" icon="fa-solid fa-arrow-up" @click="scrollToTOP()" />
+        </QPageSticky>
+      </Transition>
     </QPageContainer>
   </QLayout>
 </template>
+
+<!--<style scoped lang="scss">-->
+<!--.v-enter-active,-->
+<!--.v-leave-active {-->
+<!--  transition: opacity 1s;-->
+<!--}-->
+
+<!--.v-enter-from,-->
+<!--.v-leave-to {-->
+<!--  opacity: 0;-->
+<!--}-->
+
+<!--.v-enter-to,-->
+<!--.v-leave-from {-->
+<!--  opacity: 1;-->
+<!--}-->
+<!--</style>-->

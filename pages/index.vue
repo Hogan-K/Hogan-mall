@@ -1,12 +1,6 @@
 <script setup lang="ts">
 const { t } = useI18n()
-
-const scrollValue = ref(0)
-onMounted(() => {
-  window.onscroll = () => {
-    scrollValue.value = scrollY
-  }
-})
+const store = useStore()
 
 const carousel = ref(0)
 const carouselOption = ref([
@@ -42,7 +36,7 @@ const productList = ref([
         class="carousel-block border-radius-inherit"
         transition-prev="slide-right"
         transition-next="slide-left"
-        :class="{ 'carousel-scale' : scrollValue > 300 }"
+        :class="{ 'carousel-scale' : store.screenHeight > 300 }"
     >
       <QCarouselSlide v-for="(item, index) in carouselOption" :key="index" :name="index" :img-src="item" />
     </QCarousel>
