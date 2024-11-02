@@ -42,10 +42,10 @@ const sideBarList = ref([
     title: 'acc',
     icon: 'fa-solid fa-tags',
     classify: [
-      { title: 'acc_all', icon: 'turned_in_not', to: `/products?keyword=${t('acc_all')}` },
-      { title: 'bag', icon: 'turned_in_not', to: `/products?keyword=${t('bag')}` },
-      { title: 'shoes', icon: 'turned_in_not', to: `/products?keyword=${t('shoes')}` },
-      { title: 'hat', icon: 'turned_in_not', to: `/products?keyword=${t('hat')}` }
+      { title: 'acc_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('acc_all')}` },
+      { title: 'bag', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('bag')}` },
+      { title: 'shoes', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('shoes')}` },
+      { title: 'hat', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('hat')}` }
     ]
   }
 ])
