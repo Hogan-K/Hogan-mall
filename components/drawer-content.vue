@@ -4,43 +4,43 @@ const { t } = useI18n()
 const listActiveValue = ref<null|string>(null)
 
 const sideBarList = ref([
-  { title: 'home', icon: 'home', to: '/' },
-  { title: 'members_area', icon: 'perm_identity', to: '/' },
-  { title: 'latest_products', icon: 'local_fire_department', to: `/products?keyword=${t('latest_products')}` },
+  { title: 'home', icon: 'fa-solid fa-house', to: '/' },
+  { title: 'member_area', icon: 'fa-regular fa-user', to: '/member-area?type=account' },
+  { title: 'latest_products', icon: 'fa-solid fa-fire', to: `/products?keyword=${t('latest_products')}` },
   { title: 'all_products', icon: 'fa-solid fa-border-all', to: '/products' },
   {
     title: 'top',
-    icon: 'bookmarks',
+    icon: 'fa-solid fa-tags',
     classify: [
-      { title: 'top_all', icon: 'turned_in_not', to: `/products?keyword=${t('top_all')}` },
-      { title: 'shirt', icon: 'turned_in_not', to: `/products?keyword=${t('shirt')}` },
-      { title: 'knit', icon: 'turned_in_not', to: `/products?keyword=${t('knit')}` },
-      { title: 'vest', icon: 'turned_in_not', to: `/products?keyword=${t('vest')}` }
+      { title: 'top_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('top_all')}` },
+      { title: 'shirt', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('shirt')}` },
+      { title: 'knit', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('knit')}` },
+      { title: 'vest', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('vest')}` }
     ]
   },
   {
     title: 'outer',
-    icon: 'bookmarks',
+    icon: 'fa-solid fa-tags',
     classify: [
-      { title: 'outer_all', icon: 'turned_in_not', to: `/products?keyword=${t('outer_all')}` },
-      { title: 'blazer', icon: 'turned_in_not', to: `/products?keyword=${t('blazer')}` },
-      { title: 'overcoat', icon: 'turned_in_not', to: `/products?keyword=${t('overcoat')}` },
-      { title: 'jacket', icon: 'turned_in_not', to: `/products?keyword=${t('jacket')}` }
+      { title: 'outer_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('outer_all')}` },
+      { title: 'blazer', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('blazer')}` },
+      { title: 'overcoat', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('overcoat')}` },
+      { title: 'jacket', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('jacket')}` }
     ]
   },
   {
     title: 'bottom',
-    icon: 'bookmarks',
+    icon: 'fa-solid fa-tags',
     classify: [
-      { title: 'bottom_all', icon: 'turned_in_not', to: `/products?keyword=${t('bottom_all')}` },
-      { title: 'slacks', icon: 'turned_in_not', to: `/products?keyword=${t('slacks')}` },
-      { title: 'jeans', icon: 'turned_in_not', to: `/products?keyword=${t('jeans')}` },
-      { title: 'pants', icon: 'turned_in_not', to: `/products?keyword=${t('pants')}` }
+      { title: 'bottom_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('bottom_all')}` },
+      { title: 'slacks', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('slacks')}` },
+      { title: 'jeans', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('jeans')}` },
+      { title: 'pants', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('pants')}` }
     ]
   },
   {
     title: 'acc',
-    icon: 'bookmarks',
+    icon: 'fa-solid fa-tags',
     classify: [
       { title: 'acc_all', icon: 'turned_in_not', to: `/products?keyword=${t('acc_all')}` },
       { title: 'bag', icon: 'turned_in_not', to: `/products?keyword=${t('bag')}` },

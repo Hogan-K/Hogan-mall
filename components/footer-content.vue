@@ -6,7 +6,7 @@ const langList = locales.value.map(item => item.code)
 
 const footerLinkBtn = [
   { title: 'about_us' },
-  { title: 'members_area' },
+  { title: 'member_area', to: '/member-area?type=account' },
   { title: 'contact_us', to: '/contact-us' }
 ]
 
