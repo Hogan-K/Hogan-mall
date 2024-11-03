@@ -30,22 +30,33 @@ defineProps({
       <QBtn class="add-cart-btn absolute absolute-center" color="secondary" :label="$t('add_cart')" />
     </QCardSection>
 
-    <QCardSection class="bg-accent text-dark">
-      <div class="flex justify-between items-center">
-        <p>{{ productInfo.title }}</p>
-        <QBtn flat icon="fa-regular fa-bookmark" />
+    <QCardSection class="row bg-accent text-dark">
+      <div class="col">
+        <p class="card-title">{{ productInfo.title }}</p>
       </div>
-      <p>
-        <span :class="{ 'cancel-line' : productInfo.onSale }">{{ `NT$ ${productInfo.price}` }}</span>
-        <span v-if="productInfo.onSale" class="q-ml-sm text-negative text-size-4 text-weight-medium">{{ productInfo.onSale }}</span>
-      </p>
+      <div class="col-1">
+        <QBtn flat class="q-px-xs" icon="fa-regular fa-bookmark" />
+      </div>
+      <div class="col-12">
+        <p>
+          <span :class="{ 'cancel-line' : productInfo.onSale > 0 }">{{ `NT$ ${productInfo.price}` }}</span>
+          <span v-if="productInfo.onSale > 0" class="q-ml-sm text-negative text-size-4 text-weight-medium">{{ productInfo.onSale }}</span>
+        </p>
+      </div>
     </QCardSection>
   </QCard>
 </template>
 
 <style scoped lang="scss">
-.add-cart-btn:hover {
-  z-index: 2 !important;
+.add-cart-btn {
+  white-space: nowrap;
+  &:hover {
+    z-index: 2;
+  }
+}
+
+.card-title {
+  word-break: break-word;
 }
 
 .product-img-block {
