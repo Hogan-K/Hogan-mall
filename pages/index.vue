@@ -26,11 +26,11 @@ productList.value = currProductList.list
         infinite
         animated
         autoplay
-        height="600px"
         class="carousel-block border-radius-inherit"
         transition-prev="slide-right"
         transition-next="slide-left"
         :class="{ 'carousel-scale' : store.screenHeight > 300 }"
+        :height="store.screenWidth > 600 ? '600px': '300px'"
     >
       <QCarouselSlide v-for="(item, index) in carouselOption" :key="index" :name="index" :img-src="item" />
     </QCarousel>
@@ -41,7 +41,7 @@ productList.value = currProductList.list
       <h2 class="slogan text-center text-size-8">Fashion Enhances You</h2>
 
       <div class="row q-mt-md">
-        <div v-for="(item, index) in guidedTourLink" :key="index" class="col-6 col-sm-3 text-center">
+        <div v-for="(item, index) in guidedTourLink" :key="index" class="col-6 col-sm-3 q-my-md text-center">
           <NuxtLink :to="`/products?type=${$t(item.title)}`">
             <QImg class="guided-tour-link-image shadow-16" ratio="1" :src="item.image" :alt="`${item.title}-image`" style="border-radius: 10px" width="80%">
               <div class="fit flex flex-center text-size-5 text-weight-medium">
