@@ -15,7 +15,7 @@ const sideBarList = ref([
       { title: 'top_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('top_all')}` },
       { title: 'shirt', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('shirt')}` },
       { title: 'knit', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('knit')}` },
-      { title: 'vest', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('vest')}` }
+      { title: 'cotton_coat', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('cotton_coat')}` }
     ]
   },
   {
@@ -45,7 +45,7 @@ const sideBarList = ref([
       { title: 'acc_all', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('acc_all')}` },
       { title: 'bag', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('bag')}` },
       { title: 'shoes', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('shoes')}` },
-      { title: 'hat', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('hat')}` }
+      { title: 'other', icon: 'fa-solid fa-tag', to: `/products?keyword=${t('other')}` }
     ]
   }
 ])

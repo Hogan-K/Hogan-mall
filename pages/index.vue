@@ -1,28 +1,22 @@
 <script setup lang="ts">
-const { t } = useI18n()
+const { getSingleData } = baseController()
+
 const store = useStore()
 
 const carousel = ref(0)
-const carouselOption = ref([
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/parallax1.jpg',
-    'https://cdn.quasar.dev/img/parallax2.jpg',
-    'https://cdn.quasar.dev/img/quasar.jpg'
-])
+const carouselOption = ref([])
 
-const guidedTourLink = ref([
-  { title: 'latest_products', image: 'https://cdn.quasar.dev/img/mountains.jpg', to: `/products?keyword=${t('latest_products')}` },
-  { title: 'outer_all', image: 'https://cdn.quasar.dev/img/parallax1.jpg', to: `/products?keyword=${t('outer_all')}` },
-  { title: 'bottom_all', image: 'https://cdn.quasar.dev/img/parallax2.jpg', to: `/products?keyword=${t('bottom_all')}` },
-  { title: 'top_all', image: 'https://cdn.quasar.dev/img/quasar.jpg', to: `/products?keyword=${t('top_all')}` }
-])
+const guidedTourLink = ref([])
 
-const productList = ref([
-  { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'DDD', image: 'https://cdn.quasar.dev/img/mountdsaains.jpg', price: 1000 }
-])
+const productList = ref([])
+
+// init
+const currCarouselOption = await getSingleData('advertising_carousel', 'content')
+carouselOption.value = currCarouselOption.list
+const currGuidedTourLink = await getSingleData('recommendation_classify', 'content')
+guidedTourLink.value = currGuidedTourLink.list
+const currProductList = await getSingleData('recommendation_products', 'content')
+productList.value = currProductList.list
 </script>
 
 <template>
@@ -48,7 +42,7 @@ const productList = ref([
 
       <div class="row q-mt-md">
         <div v-for="(item, index) in guidedTourLink" :key="index" class="col-6 col-sm-3 text-center">
-          <NuxtLink :to="item.to">
+          <NuxtLink :to="`/products?type=${$t(item.title)}`">
             <QImg class="guided-tour-link-image shadow-16" ratio="1" :src="item.image" :alt="`${item.title}-image`" style="border-radius: 10px" width="80%">
               <div class="fit flex flex-center text-size-5 text-weight-medium">
                 {{ $t(item.title) }}
