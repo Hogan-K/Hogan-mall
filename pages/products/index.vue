@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const store = useStore()
+const { getSingleData } = baseController()
 
 const productList = ref([
   { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
@@ -9,6 +10,9 @@ const productList = ref([
 ])
 
 const page = ref(1)
+
+// init
+
 </script>
 
 <template>

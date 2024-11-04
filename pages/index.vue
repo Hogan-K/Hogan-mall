@@ -11,12 +11,9 @@ const guidedTourLink = ref([])
 const productList = ref([])
 
 // init
-const currCarouselOption = await getSingleData('advertising_carousel', 'content')
-carouselOption.value = currCarouselOption.list
-const currGuidedTourLink = await getSingleData('recommendation_classify', 'content')
-guidedTourLink.value = currGuidedTourLink.list
-const currProductList = await getSingleData('recommendation_products', 'content')
-productList.value = currProductList.list
+carouselOption.value = (await getSingleData('advertising_carousel', 'content')).list
+guidedTourLink.value = (await getSingleData('recommendation_classify', 'content')).list
+productList.value = (await getSingleData('recommendation_products', 'content')).list
 </script>
 
 <template>
