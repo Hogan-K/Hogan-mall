@@ -17,6 +17,10 @@ const initData = async (query) => {
       return currProductList.value = (await getSingleData('products', query.type))[query.keyword]
     }
 
+    if (query.type === 'latest_products') {
+      return currProductList.value = (await getSingleData('recommendation_products', 'content')).list
+    }
+
     if (query.type !== 'all') {
       const res = (await getSingleData('products', query.type))
       const currData = []
