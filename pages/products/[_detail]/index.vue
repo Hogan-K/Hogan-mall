@@ -1,47 +1,21 @@
 <script setup lang="ts">
-// props
-const productInfo = ref({
-  title: '超帥大衣',
-  image: 'img/default-product-image.jpg',
-  allImage: [
-      'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-    'https://cdn.quasar.dev/img/mountains.jpg',
-      'https://cdn.quasar.dev/img/mountains.jpg'
-  ],
-  price: 1000,
-  onSale: 800,
-  allSize: ['s', 'm'],
-  directions: '大部分商品為預購，如下訂後斷貨將另行通知。\n' +
-      '\n' +
-      '尺寸皆人工放平衣服測量，多少有1-3公分誤差，不在瑕疵範圍之內。\n' +
-      '\n' +
-      '商品貨源為韓國批發市場，本賣場為代購服務執行，\n' +
-      '\n' +
-      '只有瑕疵商品可以代為退換，不適用消保法退換準則，下單視為已經確認並同意內容，\n' +
-      '\n' +
-      '請詳細閱讀。\n' +
-      '\n' +
-      '大部分商品為預購，請確認可等待再下單(不接急單＆不接受中途取消)，以免造成誤會引起法律責任。\n'
-},)
-
-// ------------------------>
 const store = useStore()
+const route = useRoute()
+const { searchProducts, getSingleData } = baseController()
+
+const productInfo = ref((await searchProducts(route.params._detail))[0] || {})
 
 const productCarousel = ref(0)
 
 const shoppingOrder = ref({
   title: productInfo.value.title,
+  image: productInfo.value.image,
   size: '',
-  quantity: 1
+  quantity: 1,
+  price: productInfo.value.price,
+  onSale: productInfo.value.onSale
 })
+
 const productQuantityCounter = (type) => {
   if (type === '-' && shoppingOrder.value.quantity > 1) {
     shoppingOrder.value.quantity--
@@ -52,143 +26,7 @@ const productQuantityCounter = (type) => {
   }
 }
 
-const getRecommendList = ref([
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  },
-  {
-    title: 'recommend-1',
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    allImage: [],
-    price: 1000,
-    onSale: 800,
-    allSize: ['s', 'm'],
-    directions: ''
-  }
-])
+const getRecommendList = ref((await getSingleData('recommendation_products', 'content')).list || [])
 
 const recommendCarousel = ref('recommend-0')
 
@@ -232,15 +70,15 @@ onMounted(() => {
               control-color="accent"
               control-type="flat"
           >
-            <QCarouselSlide v-for="(item, index) in productInfo.allImage" :key="index" :name="index" :img-src="item" />
+            <QCarouselSlide v-for="(item, index) in productInfo.all_image" :key="index" :name="index" :img-src="item" />
           </QCarousel>
         </div>
 
         <div class="col-12 col-sm-4 text-dark q-mt-md">
           <h1 class="text-size-5 text-weight-medium">{{ productInfo.title }}</h1>
           <p class="q-mt-md">
-            <span :class="{ 'cancel-line' : productInfo.onSale }">{{ `NT$ ${productInfo.price}` }}</span>
-            <span v-if="productInfo.onSale" class="text-negative text-weight-medium q-ml-sm">{{ `NT$ ${productInfo.price}` }}</span>
+            <span :class="{ 'cancel-line' : productInfo.onSale > 0 }">{{ `NT$ ${productInfo.price}` }}</span>
+            <span v-if="productInfo.onSale > 0" class="text-negative text-weight-medium q-ml-sm">{{ `NT$ ${productInfo.price}` }}</span>
           </p>
 
           <div class="product-quantity-block q-mt-md">
@@ -250,7 +88,7 @@ onMounted(() => {
           </div>
 
           <div class="row q-mt-md">
-            <div v-for="(item, index) in productInfo.allSize" :key="index" class="size-select-block col-auto q-mr-sm">
+            <div v-for="(item, index) in productInfo.all_size" :key="index" class="size-select-block col-auto q-mr-sm">
               <QBtn :class="{ 'active-btn' : shoppingOrder.size === item }" flat :label="item" @click="shoppingOrder.size = item" />
             </div>
           </div>
@@ -275,14 +113,15 @@ onMounted(() => {
           arrows
           infinite
           padding
+          height="auto"
           transition-prev="slide-right"
           transition-next="slide-left"
           control-color="primary"
           class="bg-accent q-mt-md"
       >
-        <QCarouselSlide v-for="(item, index) in recommendList" :key="index" :name="`recommend-${index}`">
-          <div class="row fit flex-center no-wrap">
-            <base-card v-for="(imageItem, imageIndex) in item" :key="imageIndex" :class="{ 'q-ml-md' : imageIndex !== 0 }" :product-info="imageItem" />
+        <QCarouselSlide v-for="(item, index) in recommendList" :key="index" class="row justify-around q-col-gutter-md" :name="`recommend-${index}`">
+          <div v-for="(imageItem, imageIndex) in item" :key="imageIndex" class="col-6 col-sm-3">
+            <base-card :product-info="imageItem" />
           </div>
         </QCarouselSlide>
       </QCarousel>

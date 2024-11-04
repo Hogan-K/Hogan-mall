@@ -3,7 +3,6 @@ const route = useRoute()
 const store = useStore()
 const { getSingleData, searchProducts } = baseController()
 
-
 const productList = ref([])
 const currProductList = ref([])
 
@@ -46,7 +45,6 @@ const pagination = computed(() => {
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-
 
 watch(page, () => {
   productList.value = pagination.value
