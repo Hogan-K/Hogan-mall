@@ -14,7 +14,6 @@ onMounted(() => {
 
 onMounted(() => {
   window.onscroll = () => {
-
     store.GET_SCREEN_HEIGHT(scrollY)
   }
 })
@@ -48,20 +47,3 @@ const scrollToTOP = () => {
     </QPageContainer>
   </QLayout>
 </template>
-
-<!--<style scoped lang="scss">-->
-<!--.v-enter-active,-->
-<!--.v-leave-active {-->
-<!--  transition: opacity 1s;-->
-<!--}-->
-
-<!--.v-enter-from,-->
-<!--.v-leave-to {-->
-<!--  opacity: 0;-->
-<!--}-->
-
-<!--.v-enter-to,-->
-<!--.v-leave-from {-->
-<!--  opacity: 1;-->
-<!--}-->
-<!--</style>-->

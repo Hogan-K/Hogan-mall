@@ -1,4 +1,4 @@
-import {getDoc, doc, updateDoc, setDoc, arrayUnion, arrayRemove} from "firebase/firestore"
+import { getDoc, doc, updateDoc, setDoc, arrayUnion, arrayRemove } from "firebase/firestore"
 
 export default function () {
     const { $firebaseDataBase } = useNuxtApp()
@@ -62,7 +62,8 @@ export default function () {
             filterData = res.data().list.filter((item) => {
                 return item.title.match(keyword)
             })
-            console.log(filterData)
+
+            return filterData
         } catch (err) {
             console.log(err)
         }

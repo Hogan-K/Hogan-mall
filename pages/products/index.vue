@@ -1,18 +1,61 @@
 <script setup lang="ts">
+const route = useRoute()
 const store = useStore()
-const { getSingleData } = baseController()
+const { getSingleData, searchProducts } = baseController()
 
-const productList = ref([
-  { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'DDD', image: 'https://cdn.quasar.dev/img/mountdsaains.jpg', price: 1000 }
-])
 
+const productList = ref([])
+const currProductList = ref([])
+
+const initData = async (query) => {
+  try {
+    if (query.search) {
+      return  currProductList.value = await searchProducts(query.search)
+    }
+
+    if (query.keyword) {
+      return currProductList.value = (await getSingleData('products', query.type))[query.keyword]
+    }
+
+    if (query.type !== 'all') {
+      const res = (await getSingleData('products', query.type))
+      const currData = []
+      for (const key in res) {
+        currData.push(...res[key])
+      }
+      currProductList.value = currData
+    } else {
+      currProductList.value = (await getSingleData('products', query.type)).list
+    }
+  } finally {
+    totalPage.value = Math.ceil(currProductList.value.length / 12)
+    productList.value = pagination.value
+  }
+}
+
+const totalPage = ref(1)
 const page = ref(1)
+const pagination = computed(() => {
+  return currProductList.value.slice((page.value -1 ) * 12, page.value * 12)
+})
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
+
+
+watch(page, () => {
+  productList.value = pagination.value
+  scrollToTop()
+})
 
 // init
-
+initData(route.query)
+watch(() => route, ({ query }) => {
+  page.value = 1
+  initData(query)
+  scrollToTop()
+}, { deep: true })
 </script>
 
 <template>
@@ -33,7 +76,7 @@ const page = ref(1)
         gutter="10px"
         color="grey"
         active-color="primary"
-        max="10"
+        :max="totalPage"
         :max-pages="store.screenWidth <= 600 ? 3 : 10"
     />
   </QPage>

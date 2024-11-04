@@ -73,5 +73,6 @@
   "input_rule_error": "格式錯誤",
   "required": "必填",
   "please_choose_product": "請選擇商品",
-  "please_write_info_required": "請填寫必填資訊"
+  "please_write_info_required": "請填寫必填資訊",
+  "please_enter_keyword": "請輸入關鍵字"
 }

@@ -1,7 +1,22 @@
 <script setup lang="ts">
 const drawerSwitch: boolean = defineModel({ type: Boolean })
+const router = useRouter()
+const $q = useQuasar()
+const { t } = useI18n()
 
-const search = ref(null)
+const searchValue = ref(null)
+const search = () => {
+  if (searchValue.value) {
+    return router.push({ path: '/products', query: { search: searchValue.value } })
+  }
+
+  $q.notify({
+    message: t('please_enter_keyword'),
+    position: 'top-right',
+    color: 'negative',
+    timeout: 5000
+  })
+}
 </script>
 
 <template>
@@ -14,7 +29,7 @@ const search = ref(null)
     <QSpace />
 
     <QInput
-        v-model="search"
+        v-model="searchValue"
         class="search-bar q-mr-sm"
         outlined
         rounded
@@ -22,6 +37,7 @@ const search = ref(null)
         clearable
         clear-icon="backspace"
         :maxlength="15"
+        @change="search()"
     >
       <template #append>
         <QIcon name="search" color="primary" />
