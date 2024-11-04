@@ -58,7 +58,7 @@ const register = async () => {
 }
 const getUserInfo = async () => {
   const res = await getSingleData('users', store.auth.user.uid)
-  store.GET_USERINFO(res)
+  store.UPDATE_USERINFO(res)
 }
 const login = async () => {
   try {

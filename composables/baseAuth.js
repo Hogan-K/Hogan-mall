@@ -26,7 +26,7 @@ export default function () {
     const authRegister = async (registerInfo) => {
         try {
             const res = await createUserWithEmailAndPassword(auth, registerInfo.email, registerInfo.password)
-            store.GET_AUTH(res)
+            store.UPDATE_AUTH(res)
             notify(t('register_success'), 'secondary')
         } catch (err) {
             console.log(err)
@@ -38,7 +38,7 @@ export default function () {
     const authLogin = async (loginInfo) => {
         try {
             const res = await signInWithEmailAndPassword(auth, loginInfo.account, loginInfo.password)
-            store.GET_AUTH(res)
+            store.UPDATE_AUTH(res)
             notify(t('login_success'), 'secondary')
         } catch (err) {
             console.log(err)
@@ -71,7 +71,7 @@ export default function () {
     const authSignOut = async () => {
         try {
             await firebaseSignOut(auth)
-            store.CLEAR_AUTH()
+            store.UPDATE_AUTH({})
             notify(t('sign_out_success'), 'secondary')
         } catch (err) {
             console.log(err)
@@ -84,7 +84,7 @@ export default function () {
         const user = await auth.currentUser
         firebaseDeleteUser(user).then(() => {
             authSignOut()
-            store.CLEAR_AUTH()
+            store.UPDATE_AUTH({})
             notify(t('delete_account_success'), 'secondary')
         }).catch((err) => {
             console.log('err :', err)

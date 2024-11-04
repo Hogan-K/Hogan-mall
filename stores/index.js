@@ -12,13 +12,10 @@ export const useStore = defineStore('store', {
         GET_SCREEN_HEIGHT (res) {
             this.screenHeight = res
         },
-        GET_AUTH (res) {
+        UPDATE_AUTH (res) {
             this.auth = res
         },
-        CLEAR_AUTH () {
-            this.auth = {}
-        },
-        GET_USERINFO (res) {
+        UPDATE_USERINFO (res) {
             this.userInfo = res
         }
     },
