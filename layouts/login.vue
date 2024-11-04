@@ -1,14 +1,7 @@
-<script setup lang="ts">
-
-</script>
-
 <template>
-  <div>
-    <h1>Login</h1>
-    <slot />
-  </div>
+  <QLayout>
+    <QPageContainer>
+      <slot />
+    </QPageContainer>
+  </QLayout>
 </template>
-
-<style scoped>
-
-</style>

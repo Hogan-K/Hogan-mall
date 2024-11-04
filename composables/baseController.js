@@ -2,15 +2,27 @@ import { getDoc, doc, updateDoc, setDoc, arrayUnion, arrayRemove } from "firebas
 
 export default function () {
     const { $firebaseDataBase } = useNuxtApp()
+    const $q = useQuasar()
+    const { t } = useI18n()
+
+    const notify = (message, color = 'negative') => {
+        $q.notify({
+            message,
+            position: 'top-right',
+            color
+        })
+    }
 
     // 取得單一欄位資料
     const getSingleData = async (collection, id) => {
         try {
             const docRef = doc($firebaseDataBase, collection, id)
             const res = await getDoc(docRef)
+            console.log('ok')
             return res.data()
         } catch (err) {
             console.log('err', err)
+            notify(t('get_data_fail'))
         }
     }
 
@@ -32,11 +44,12 @@ export default function () {
 
             await setDoc(docRef, {
                 list: arrayUnion(data)
-            }, {merge: true})
+            }, { merge: true })
 
-            console.log('ok')
+            notify(collection === 'cart' ? t('add_cart_success') : t('add_collection_success'), 'secondary')
         } catch (err) {
             console.log(err)
+            notify(collection === 'cart' ? t('add_cart_fail') : t('add_collection_fail'))
         }
     }
 
@@ -47,9 +60,10 @@ export default function () {
             await updateDoc(docRef, {
                 list: arrayRemove(data)
             })
-            console.log('ok')
+            notify(t('delete_product_success'), 'secondary')
         } catch (err) {
             console.log(err)
+            notify(t('delete_product_fail'))
         }
     }
 
@@ -66,6 +80,7 @@ export default function () {
             return filterData
         } catch (err) {
             console.log(err)
+            notify(t('search_product_fail'))
         }
     }
 
@@ -74,9 +89,10 @@ export default function () {
         try {
             const docRef = doc($firebaseDataBase, "users", uid)
             await setDoc(docRef, data)
-            console.log('ok')
+            notify(t('save_data_success'), 'secondary')
         } catch (err) {
             console.log(err)
+            notify(t('save_data_fail'))
         }
     }
 
