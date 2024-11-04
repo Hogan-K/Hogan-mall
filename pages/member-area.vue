@@ -1,4 +1,8 @@
 <script setup lang="ts">
+definePageMeta({
+  middleware: 'auth'
+})
+
 const { required, name, cellphone, email } = baseInput()
 const route = useRoute()
 const router = useRouter()

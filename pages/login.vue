@@ -1,8 +1,4 @@
 <script setup lang="ts">
-definePageMeta({
-  layout: 'login'
-})
-
 const router = useRouter()
 const store = useStore()
 const { required, name, email } = baseInput()
@@ -62,8 +58,12 @@ const getUserInfo = async () => {
 }
 const login = async () => {
   try {
+    const toPath = useState('toPath')
     await authLogin(loginInfo.value)
     await getUserInfo()
+    if (toPath.value) {
+      return router.push({ path: toPath.value.path, query: toPath.value.query })
+    }
     router.push({ path: '/' })
   } catch (err) {
     console.log(err)
@@ -73,8 +73,8 @@ const login = async () => {
 
 <template>
   <QPage class="bg-accent">
-    <QTabPanels v-model="tab" animated class="bg-accent" style="height: 100vh">
-      <QTabPanel class="row flex-center" :name="1">
+    <QTabPanels v-model="tab" animated class="bg-accent q-mb-xl">
+      <QTabPanel class="row justify-center q-mt-xl" :name="1">
         <QForm ref="loginForm" class="col-10 col-sm-5" @submit="login()">
           <h1 class="text-center text-size-8 text-weight-medium text-primary q-mb-lg">{{ $t('account_login') }}</h1>
           <Base-input v-model="loginInfo.account" width="auto" label="email" :rules="[required]" />
@@ -99,7 +99,7 @@ const login = async () => {
         </QForm>
       </QTabPanel>
 
-      <QTabPanel class="row flex-center" :name="2">
+      <QTabPanel class="row justify-center q-mt-xl" :name="2">
         <QForm ref="registerForm" class="col-10 col-sm-5" @submit="register()">
           <h1 class="text-center text-size-8 text-weight-medium text-primary q-mb-lg">{{ $t('register_account') }}</h1>
           <template v-for="(item, index) in registerInputList" :key="index">

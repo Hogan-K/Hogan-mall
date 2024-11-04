@@ -74,6 +74,7 @@
   "login": "登入",
   "login_success": "登入成功",
   "login_fail": "登入失敗",
+  "sign_out": "登出",
   "sign_out_success": "已登出",
   "sign_out_fail": "登出失敗",
   "register_account": "註冊會員",

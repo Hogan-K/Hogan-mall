@@ -1,5 +1,8 @@
 <script setup lang="ts">
-import { useQuasar } from 'quasar'
+definePageMeta({
+  middleware: 'auth'
+})
+
 const store = useStore()
 const { t } = useI18n()
 

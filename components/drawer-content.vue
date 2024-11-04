@@ -1,5 +1,8 @@
 <script setup lang="ts">
 const listActiveValue = ref<null|string>(null)
+const { authSignOut } = baseAuth()
+const store = useStore()
+const router = useRouter()
 
 const sideBarList = ref([
   { title: 'home', icon: 'fa-solid fa-house', to: '/' },
@@ -47,6 +50,13 @@ const sideBarList = ref([
     ]
   }
 ])
+
+const loginStatusSwitch = async () => {
+  if (store.auth.user && store.userInfo.email) {
+    return authSignOut()
+  }
+  router.push({ path: '/login' })
+}
 </script>
 
 <template>
@@ -97,6 +107,14 @@ const sideBarList = ref([
           </QList>
         </QExpansionItem>
       </div>
+
+      <QSeparator />
+
+      <QItem class="text-center bg-primary text-accent text-weight-medium">
+        <QItemSection>
+          <QBtn flat :label="store.auth.user ? $t('sign_out') : $t('login')" @click="loginStatusSwitch()" />
+        </QItemSection>
+      </QItem>
     </QList>
   </QScrollArea>
 </template>

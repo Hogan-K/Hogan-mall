@@ -1,4 +1,9 @@
 export default defineNuxtRouteMiddleware((to, from) => {
+    const router = useRouter()
     const store = useStore()
-    console.log('middleware')
+
+    useState('toPath', () => to)
+    if (!store.auth.user || !store.userInfo.email) {
+        return router.push({ path: '/login' })
+    }
 })

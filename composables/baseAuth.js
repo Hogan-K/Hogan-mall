@@ -12,6 +12,7 @@ export default function () {
     const $q = useQuasar()
     const { t } = useI18n()
     const store = useStore()
+    const router = useRouter()
     const auth = getAuth()
 
     const notify = (message, color = 'negative') => {
@@ -61,6 +62,7 @@ export default function () {
         try {
             onAuthStateChanged(auth, (res) => {
                 console.log(res)
+                store.UPDATE_AUTH(res)
             })
         } catch (err) {
             console.log(err)
@@ -68,15 +70,16 @@ export default function () {
     }
 
     // 登出
-    const authSignOut = async () => {
-        try {
-            await firebaseSignOut(auth)
+    const authSignOut = () => {
+        firebaseSignOut(auth).then(() => {
             store.UPDATE_AUTH({})
+            store.UPDATE_USERINFO({})
             notify(t('sign_out_success'), 'secondary')
-        } catch (err) {
+            router.push({ path: '/' })
+        }).catch((err) => {
             console.log(err)
             notify(t('sign_out_fail'))
-        }
+        })
     }
 
     // 刪除帳號
