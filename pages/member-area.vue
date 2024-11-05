@@ -56,7 +56,7 @@ const myCoupons = ref([
 ])
 
 // collection block
-const collection = ref((await getSingleData('collection', store.auth.user.uid)).list || [])
+const collection = ref((await getSingleData('collection', store.auth.uid)).list || [])
 collection.value.forEach((item) => {
   item.isCollection = true
 })

@@ -18,11 +18,15 @@ export default function () {
         try {
             const docRef = doc($firebaseDataBase, collection, id)
             const res = await getDoc(docRef)
-            console.log('ok')
-            return res.data()
+            if (res.exists()) {
+                return res.data()
+            } else {
+                return {}
+            }
         } catch (err) {
             console.log('err', err)
             notify(t('get_data_fail'))
+            return {}
         }
     }
 

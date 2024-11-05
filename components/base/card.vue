@@ -23,7 +23,7 @@ const $q = useQuasar()
 const productInfo = computed(() => props.productInfo)
 
 const addCollection = async () => {
-  if (!store.auth.user || !store.userInfo.email) {
+  if (!store.auth.uid) {
     $q.notify({
       message: '請先登入',
       position: 'top-right',
@@ -35,16 +35,16 @@ const addCollection = async () => {
   // 取消收藏
   if (productInfo.value.isCollection) {
     delete productInfo.value.isCollection
-    return deleteCartOrCollection('collection', store.auth.user.uid, productInfo.value)
+    return deleteCartOrCollection('collection', store.auth.uid, productInfo.value)
   }
 
   // 加入收藏
-  await addCartOrCollection('collection', store.auth.user.uid, productInfo.value)
+  await addCartOrCollection('collection', store.auth.uid, productInfo.value)
   productInfo.value.isCollection = !productInfo.value.isCollection
 }
 
 const addCart = async () => {
-  if (!store.auth.user || !store.userInfo.email) {
+  if (!store.auth.uid) {
     $q.notify({
       message: '請先登入',
       position: 'top-right',
@@ -53,7 +53,7 @@ const addCart = async () => {
     return router.push({ path: '/login' })
   }
 
-  addCartOrCollection('cart', store.auth.user.uid, productInfo.value)
+  addCartOrCollection('cart', store.auth.uid, productInfo.value)
 }
 </script>
 

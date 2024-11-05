@@ -140,10 +140,18 @@ const onPrevious = () => {
     step.value--
   }
 }
+
+const { authVerifyStatus } = baseAuth()
+
+const test = () => {
+  authVerifyStatus()
+}
+console.log(store.auth)
 </script>
 
 <template>
   <QPage>
+    <QBtn label="test" @click="test()" />
     <QStepper ref="stepper" v-model="step" flat animated class="stepper-block bg-accent" header-class="q-py-lg q-px-md">
       <QStep class="q-pa-lg" icon="fa-solid fa-cart-shopping" :name="1" :title="$t('check_cart')" :done="step > 1">
         <QTable

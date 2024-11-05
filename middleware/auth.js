@@ -1,9 +1,16 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-    const router = useRouter()
-    const store = useStore()
+import { onAuthStateChanged, getAuth } from "firebase/auth"
 
-    useState('toPath', () => to)
-    if (!store.auth.user || !store.userInfo.email) {
-        return router.push({ path: '/login' })
+export default defineNuxtRouteMiddleware((to) => {
+    const router = useRouter()
+    const auth = getAuth()
+
+    if (import.meta.client) {
+        useState('toPath', () => to)
+
+        onAuthStateChanged(auth, (res) => {
+            if (!res) {
+                router.push({ path: '/login' })
+            }
+        })
     }
 })

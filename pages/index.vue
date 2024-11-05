@@ -8,7 +8,7 @@ const guidedTourLink = ref((await getSingleData('recommendation_classify', 'cont
 const productList = ref((await getSingleData('recommendation_products', 'content')).list || [])
 
 const getCollectionItem = async () => {
-  const collectionList = (await getSingleData('collection', store.auth.user.uid)).list
+  const collectionList = (await getSingleData('collection', store.auth.uid)).list || []
   const collectionMap = collectionList.reduce((acc, cur) => {
     acc[cur.title] = cur
     return acc
@@ -23,7 +23,7 @@ const getCollectionItem = async () => {
 }
 
 // init
-if (store.auth.user && store.userInfo.email) {
+if (store.auth.uid) {
   getCollectionItem()
 }
 </script>

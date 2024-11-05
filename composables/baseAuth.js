@@ -27,7 +27,7 @@ export default function () {
     const authRegister = async (registerInfo) => {
         try {
             const res = await createUserWithEmailAndPassword(auth, registerInfo.email, registerInfo.password)
-            store.UPDATE_AUTH(res)
+            store.UPDATE_AUTH(res.user)
             notify(t('register_success'), 'secondary')
         } catch (err) {
             console.log(err)
@@ -39,7 +39,7 @@ export default function () {
     const authLogin = async (loginInfo) => {
         try {
             const res = await signInWithEmailAndPassword(auth, loginInfo.account, loginInfo.password)
-            store.UPDATE_AUTH(res)
+            store.UPDATE_AUTH(res.user)
             notify(t('login_success'), 'secondary')
         } catch (err) {
             console.log(err)
@@ -49,7 +49,7 @@ export default function () {
 
     // email 驗證信
     const authEmailVerify = () => {
-        sendEmailVerification(store.auth.user).then(() => {
+        sendEmailVerification(store.auth).then(() => {
             notify(t('sendEmailVerify_success'), 'secondary')
         }).catch((err) => {
             console.log(err)
@@ -62,7 +62,6 @@ export default function () {
         try {
             onAuthStateChanged(auth, (res) => {
                 console.log(res)
-                store.UPDATE_AUTH(res)
             })
         } catch (err) {
             console.log(err)
@@ -70,12 +69,18 @@ export default function () {
     }
 
     // 登出
-    const authSignOut = () => {
+    const authSignOut = (showNotify = true, routerPush) => {
         firebaseSignOut(auth).then(() => {
             store.UPDATE_AUTH({})
             store.UPDATE_USERINFO({})
-            notify(t('sign_out_success'), 'secondary')
-            router.push({ path: '/' })
+
+            if (showNotify) {
+                notify(t('sign_out_success'), 'secondary')
+            }
+
+            if (routerPush) {
+                router.push({path: '/'})
+            }
         }).catch((err) => {
             console.log(err)
             notify(t('sign_out_fail'))

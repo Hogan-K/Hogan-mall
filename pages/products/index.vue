@@ -6,7 +6,7 @@ const { getSingleData, searchProducts } = baseController()
 const productList = ref([])
 
 const getCollectionItem = async () => {
-  const collectionList = (await getSingleData('collection', store.auth.user.uid)).list
+  const collectionList = (await getSingleData('collection', store.auth.uid)).list
   const collectionMap = collectionList.reduce((acc, cur) => {
     acc[cur.title] = cur
     return acc
@@ -63,7 +63,7 @@ watch(page, () => {
 
 // init
 initData(route.query)
-if (store.auth.user && store.userInfo.email) {
+if (store.auth.uid) {
   getCollectionItem()
 }
 

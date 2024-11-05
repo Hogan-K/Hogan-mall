@@ -52,11 +52,15 @@ const sideBarList = ref([
 ])
 
 const loginStatusSwitch = async () => {
-  if (store.auth.user && store.userInfo.email) {
-    return authSignOut()
+  if (store.auth.uid) {
+    return authSignOut(true, true)
   }
   router.push({ path: '/login' })
 }
+
+const loginStatusSwitchLabel = computed(() => {
+  return store.auth.uid ? 'sign_out' : 'login'
+})
 </script>
 
 <template>
@@ -112,7 +116,7 @@ const loginStatusSwitch = async () => {
 
       <QItem class="text-center bg-primary text-accent text-weight-medium">
         <QItemSection>
-          <QBtn flat :label="store.auth.user ? $t('sign_out') : $t('login')" @click="loginStatusSwitch()" />
+          <QBtn flat :label="$t(loginStatusSwitchLabel)" @click="loginStatusSwitch()" />
         </QItemSection>
       </QItem>
     </QList>

@@ -44,16 +44,17 @@ const register = async () => {
   await authRegister(registerInfo.value)
   if (store.auth) {
     await authEmailVerify()
-    await saveUserInfo(store.auth.user.uid, {
+    await saveUserInfo(store.auth.uid, {
       email: registerInfo.value.email,
       name: registerInfo.value.name,
       birthday: registerInfo.value.birthday
     })
-    authSignOut()
+    await authSignOut(false)
+    tab.value = 1
   }
 }
 const getUserInfo = async () => {
-  const res = await getSingleData('users', store.auth.user.uid)
+  const res = await getSingleData('users', store.auth.uid)
   store.UPDATE_USERINFO(res)
 }
 const login = async () => {
@@ -61,6 +62,7 @@ const login = async () => {
     const toPath = useState('toPath')
     await authLogin(loginInfo.value)
     await getUserInfo()
+    sessionStorage.setItem('auth', JSON.stringify(store.auth))
     if (toPath.value) {
       return router.push({ path: toPath.value.path, query: toPath.value.query })
     }

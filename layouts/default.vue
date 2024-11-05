@@ -13,6 +13,11 @@ onMounted(() => {
 })
 
 onMounted(() => {
+  const sessionAuth = JSON.parse(sessionStorage.getItem('auth'))
+  if (sessionAuth) {
+    store.UPDATE_AUTH(sessionAuth)
+  }
+
   window.onscroll = () => {
     store.GET_SCREEN_HEIGHT(scrollY)
   }
