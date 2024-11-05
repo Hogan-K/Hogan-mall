@@ -1,19 +1,31 @@
 <script setup lang="ts">
 const { getSingleData } = baseController()
-
 const store = useStore()
 
 const carousel = ref(0)
-const carouselOption = ref([])
+const carouselOption = ref((await getSingleData('advertising_carousel', 'content')).list || [])
+const guidedTourLink = ref((await getSingleData('recommendation_classify', 'content')).list || [])
+const productList = ref((await getSingleData('recommendation_products', 'content')).list || [])
 
-const guidedTourLink = ref([])
+const getCollectionItem = async () => {
+  const collectionList = (await getSingleData('collection', store.auth.user.uid)).list
+  const collectionMap = collectionList.reduce((acc, cur) => {
+    acc[cur.title] = cur
+    return acc
+  }, {})
 
-const productList = ref([])
+  productList.value.forEach((item) => {
+    const hasItem = !!collectionMap[item.title]
+    if (hasItem) {
+      item.isCollection = true
+    }
+  })
+}
 
 // init
-carouselOption.value = (await getSingleData('advertising_carousel', 'content')).list
-guidedTourLink.value = (await getSingleData('recommendation_classify', 'content')).list
-productList.value = (await getSingleData('recommendation_products', 'content')).list
+if (store.auth.user && store.userInfo.email) {
+  getCollectionItem()
+}
 </script>
 
 <template>

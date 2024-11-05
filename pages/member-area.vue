@@ -3,6 +3,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
+const { getSingleData } = baseController()
 const { required, name, cellphone, email } = baseInput()
 const route = useRoute()
 const router = useRouter()
@@ -55,14 +56,25 @@ const myCoupons = ref([
 ])
 
 // collection block
-const collection = ref([
-  { title: 'BBB', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000, onSale: 880 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'CCC', image: 'https://cdn.quasar.dev/img/mountains.jpg', price: 1000 },
-  { title: 'DDD', image: 'https://cdn.quasar.dev/img/mountdsaains.jpg', price: 1000 }
-])
+const collection = ref((await getSingleData('collection', store.auth.user.uid)).list || [])
+collection.value.forEach((item) => {
+  item.isCollection = true
+})
+
+// pagination
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 const page = ref(1)
+watch(page, () => {
+  scrollToTop()
+})
+
+const totalPage = ref(Math.ceil(collection.value.length / 12))
+const showCollection = computed(() => {
+  return collection.value.slice((page.value - 1) * 12, page.value * 12)
+})
 </script>
 
 <template>
@@ -166,7 +178,7 @@ const page = ref(1)
       </QTabPanel>
       <QTabPanel name="collection">
         <div class="row q-pa-md">
-          <div v-for="(item, index) in collection" :key="index" class="col-6 col-sm-3 q-pa-sm">
+          <div v-for="(item, index) in showCollection" :key="index" class="col-6 col-sm-3 q-pa-sm">
             <Base-card :product-info="item" />
           </div>
         </div>
@@ -178,7 +190,7 @@ const page = ref(1)
             gutter="10px"
             color="grey"
             active-color="primary"
-            max="10"
+            :max="totalPage"
             :max-pages="store.screenWidth <= 600 ? 3 : 10"
         />
       </QTabPanel>

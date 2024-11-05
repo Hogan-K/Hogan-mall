@@ -4,20 +4,33 @@ const store = useStore()
 const { getSingleData, searchProducts } = baseController()
 
 const productList = ref([])
-const currProductList = ref([])
 
+const getCollectionItem = async () => {
+  const collectionList = (await getSingleData('collection', store.auth.user.uid)).list
+  const collectionMap = collectionList.reduce((acc, cur) => {
+    acc[cur.title] = cur
+    return acc
+  }, {})
+
+  productList.value.forEach((item) => {
+    const hasItem = !!collectionMap[item.title]
+    if (hasItem) {
+      item.isCollection = true
+    }
+  })
+}
 const initData = async (query) => {
   try {
     if (query.search) {
-      return  currProductList.value = await searchProducts(query.search)
+      return  productList.value = await searchProducts(query.search)
     }
 
     if (query.keyword) {
-      return currProductList.value = (await getSingleData('products', query.type))[query.keyword]
+      return productList.value = (await getSingleData('products', query.type))[query.keyword]
     }
 
     if (query.type === 'latest_products') {
-      return currProductList.value = (await getSingleData('recommendation_products', 'content')).list
+      return productList.value = (await getSingleData('recommendation_products', 'content')).list
     }
 
     if (query.type !== 'all') {
@@ -26,33 +39,34 @@ const initData = async (query) => {
       for (const key in res) {
         currData.push(...res[key])
       }
-      currProductList.value = currData
+      productList.value = currData
     } else {
-      currProductList.value = (await getSingleData('products', query.type)).list
+      productList.value = (await getSingleData('products', query.type)).list
     }
   } finally {
-    totalPage.value = Math.ceil(currProductList.value.length / 12)
-    productList.value = pagination.value
+    totalPage.value = Math.ceil(productList.value.length / 12)
   }
 }
 
+// pagination
 const totalPage = ref(1)
 const page = ref(1)
-const pagination = computed(() => {
-  return currProductList.value.slice((page.value -1 ) * 12, page.value * 12)
+const showProductList = computed(() => {
+  return productList.value.slice((page.value -1 ) * 12, page.value * 12)
 })
-
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
-
 watch(page, () => {
-  productList.value = pagination.value
   scrollToTop()
 })
 
 // init
 initData(route.query)
+if (store.auth.user && store.userInfo.email) {
+  getCollectionItem()
+}
+
 watch(() => route, ({ query }) => {
   page.value = 1
   initData(query)
@@ -65,7 +79,7 @@ watch(() => route, ({ query }) => {
     <Base-guide-map />
 
     <div class="row q-col-gutter-lg q-px-xl">
-      <div v-for="(item, index) in productList" :key="index" class="col-6 col-sm-3">
+      <div v-for="(item, index) in showProductList" :key="index" class="col-6 col-sm-3">
         <base-card :product-info="item" />
       </div>
     </div>

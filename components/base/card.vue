@@ -3,15 +3,58 @@ interface ProductList {
   title: string;
   image: string;
   price: number;
-  onSale?: number
+  onSale?: number;
+  isCollection?: boolean;
 }
 
-defineProps({
+const props = defineProps({
   productInfo: {
     type: Object as PropType<ProductList>,
     default: () => {}
   }
 })
+
+// ---------------------------------->
+const { addCartOrCollection, deleteCartOrCollection } = baseController()
+const store = useStore()
+const router = useRouter()
+const $q = useQuasar()
+
+const productInfo = computed(() => props.productInfo)
+
+const addCollection = async () => {
+  if (!store.auth.user || !store.userInfo.email) {
+    $q.notify({
+      message: '請先登入',
+      position: 'top-right',
+      color: 'negative'
+    })
+    return router.push({ path: '/login' })
+  }
+
+  // 取消收藏
+  if (productInfo.value.isCollection) {
+    delete productInfo.value.isCollection
+    return deleteCartOrCollection('collection', store.auth.user.uid, productInfo.value)
+  }
+
+  // 加入收藏
+  await addCartOrCollection('collection', store.auth.user.uid, productInfo.value)
+  productInfo.value.isCollection = !productInfo.value.isCollection
+}
+
+const addCart = async () => {
+  if (!store.auth.user || !store.userInfo.email) {
+    $q.notify({
+      message: '請先登入',
+      position: 'top-right',
+      color: 'negative'
+    })
+    return router.push({ path: '/login' })
+  }
+
+  addCartOrCollection('cart', store.auth.user.uid, productInfo.value)
+}
 </script>
 
 <template>
@@ -27,7 +70,7 @@ defineProps({
         </template>
       </QImg>
       </NuxtLink>
-      <QBtn class="add-cart-btn absolute absolute-center" color="secondary" :label="$t('add_cart')" />
+      <QBtn class="add-cart-btn absolute absolute-center" color="secondary" :label="$t('add_cart')" @click="addCart()" />
     </QCardSection>
 
     <QCardSection class="row bg-accent text-dark">
@@ -35,7 +78,7 @@ defineProps({
         <p class="card-title">{{ productInfo.title }}</p>
       </div>
       <div class="col-1">
-        <QBtn flat class="q-px-xs" icon="fa-regular fa-bookmark" />
+        <QBtn flat class="q-px-xs" :icon="productInfo.isCollection ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'" @click="addCollection()" />
       </div>
       <div class="col-12">
         <p>
