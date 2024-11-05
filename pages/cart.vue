@@ -158,7 +158,6 @@ const onPrevious = () => {
       <QStep class="q-pa-lg" icon="fa-solid fa-cart-shopping" :name="1" :title="$t('check_cart')" :done="step > 1">
         <QTable
             v-model:selected="orderList"
-            hide-bottom
             selection="multiple"
             row-key="id"
             :columns="tableHeader"

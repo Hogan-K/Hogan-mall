@@ -74,6 +74,7 @@ const addCart = async () => {
 
   addCartOrCollection('cart', store.auth.uid, shoppingOrder.value)
   store.UPDATE_CART_AMOUNT(store.cartAmount + 1)
+  shoppingOrder.value.id = getRandomInt()
 }
 
 </script>
