@@ -3,7 +3,7 @@ definePageMeta({
   middleware: 'auth'
 })
 
-const { getSingleData } = baseController()
+const { getSingleData, saveUserInfo } = baseController()
 const { required, name, cellphone, email } = baseInput()
 const route = useRoute()
 const router = useRouter()
@@ -35,24 +35,33 @@ const genderSelectOption = [
 
 const form = ref(null)
 const onSave = () => {
-  form.value.validate().then(res => {
-    if (res) {
-      console.log('call api')
-    } else {
-      console.log(res)
-    }
-  })
+  saveUserInfo(store.auth.uid, accountInfo.value)
 }
+// TODO
 const editPassword = () => {
   console.log('改密碼')
 }
 
+onMounted(async () => {
+  const currAccountInfo = await getSingleData('users', store.auth.uid)
+  accountInfo.value = {
+    name: currAccountInfo.name || '',
+    cellphone: currAccountInfo.cellphone || '',
+    email: currAccountInfo.email || '',
+    gender: currAccountInfo.gender || '',
+    birthday: currAccountInfo.birthday || ''
+  }
+})
+
 // order_record block
 const orderInfo  = ref([])
-const myCoupons = ref([
-  { title: '週年慶', introduce: 'happyhappyhappyhappy', code: '' },
-  { title: '黑色星期五', introduce: 'happyhappyhappy', code: '' }
-])
+
+// coupons block
+const myCoupons = ref([])
+
+onMounted(async () => {
+  myCoupons.value = (await getSingleData('coupons', store.auth.uid)).list || []
+})
 
 // collection block
 const collection = ref([])
@@ -74,7 +83,7 @@ watch(page, () => {
   scrollToTop()
 })
 
-const totalPage = ref(Math.ceil(collection.value.length / 12))
+const totalPage = ref(Math.ceil(collection.value.length / 12) || 1)
 const showCollection = computed(() => {
   return collection.value.slice((page.value - 1) * 12, page.value * 12)
 })
@@ -186,6 +195,7 @@ const showCollection = computed(() => {
           </div>
         </div>
         <QPagination
+            v-if="collection.length"
             v-model="page"
             direction-links
             boundary-links
