@@ -1,18 +1,20 @@
 <script setup lang="ts">
 const store = useStore()
+const { getSingleData } = baseController()
 
 const drawerWidth = computed(() => {
   return store.screenWidth > 600 ? 250 : 330
 })
 
 const drawerSwitch = ref(false)
-onMounted(() => {
+
+onMounted(async () => {
+  const cartList = (await getSingleData('cart', store.auth.uid)).list || []
+  store.UPDATE_CART_AMOUNT(cartList.length)
+
   if (store.screenWidth > 600) {
     drawerSwitch.value = true
   }
-})
-
-onMounted(() => {
   window.onscroll = () => {
     store.GET_SCREEN_HEIGHT(scrollY)
   }

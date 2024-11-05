@@ -58,13 +58,15 @@ export default function () {
     }
 
     // 移除購物車、我的最愛商品 (購物車、收藏的刪除) **資料須完全一致才能刪除
-    const deleteCartOrCollection = async (collection, uid, data) => {
+    const deleteCartOrCollection = async (collection, uid, data, hiddenNotify = true) => {
         try {
             const docRef = doc($firebaseDataBase, collection, uid)
             await updateDoc(docRef, {
                 list: arrayRemove(data)
             })
-            notify(t('delete_product_success'), 'secondary')
+            if (!hiddenNotify) {
+                notify(t('delete_product_success'), 'secondary')
+            }
         } catch (err) {
             console.log(err)
             notify(t('delete_product_fail'))
@@ -100,12 +102,26 @@ export default function () {
         }
     }
 
+    const sendOrder = async (uid, data) => {
+        try {
+            const docRef = doc($firebaseDataBase, "order_record", uid)
+            await setDoc(docRef, {
+                [data.id]: data
+            })
+            notify(t('send_order_success'), 'secondary')
+        } catch (err) {
+            console.log(err)
+            notify(t('send_order_fail'))
+        }
+    }
+
     return {
         getSingleData,
         editInfo,
         addCartOrCollection,
         deleteCartOrCollection,
         searchProducts,
-        saveUserInfo
+        saveUserInfo,
+        sendOrder
     }
 }

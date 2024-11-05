@@ -5,6 +5,7 @@ definePageMeta({
 
 const store = useStore()
 const { t } = useI18n()
+const { getSingleData, sendOrder, deleteCartOrCollection } = baseController()
 
 const step = ref(1)
 const showPreviousBtn = computed(() => {
@@ -25,8 +26,9 @@ const stepperNavigationPreviousLabel = computed(() => {
 
 // step1 block
 const tableHeader = ref([
+  { name: 'id', field: 'id', required: true, label: '', align: 'center', sortable: false },
   { name: 'image', field: 'image', required: true, label: '', align: 'center', sortable: false },
-  { name: 'name', field: 'name', required: true, label: t('product_name'), align: 'center', sortable: false },
+  { name: 'title', field: 'title', required: true, label: t('product_name'), align: 'center', sortable: false },
   { name: 'size', field: 'size', required: true, label: t('size'), align: 'center', sortable: false },
   { name: 'quantity', field: 'quantity', required: true, label: t('quantity'), align: 'center', sortable: false },
   { name: 'price', field: 'price', required: true, label: t('price'), align: 'center', sortable: false },
@@ -34,52 +36,52 @@ const tableHeader = ref([
 ])
 
 // 購物車清單
-const tableRow = ref([
-  {
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    name: 'top',
-    size: 'M',
-    quantity: 5,
-    price: 2000,
-    onSale: 990
-  },
-  {
-    image: 'https://cdn.quasar.dev/img/mountains.jpg',
-    name: 'bottom',
-    size: 'M',
-    quantity: 5,
-    price: 2000
-  }
-])
+const tableRow = ref([])
 
 // 訂單清單
 const orderList = ref([])
 
-const deleteList = (id) => {
-  // 刪除訂單清單項目
-  const currDeleteIndex = orderList.value.findIndex((item) => {
-    return item.name === id
+const deleteList = (array, id) => {
+  const currDeleteIndex = array.findIndex((item) => {
+    return item.id === id
   })
 
   if (currDeleteIndex !== -1) {
-    orderList.value.splice(currDeleteIndex, 1)
+    if (array === tableRow.value) {
+      deleteCartOrCollection('cart', store.auth.uid, array[currDeleteIndex])
+    }
+    array.splice(currDeleteIndex, 1)
   }
+}
 
-  // 刪除購物車清單
+const deleteCartList = (id) => {
+  deleteList(orderList.value, id)
+  deleteList(tableRow.value, id)
+  store.UPDATE_CART_AMOUNT(store.cartAmount - 1)
 }
 
 const couponCode = ref(null)
-const findCoupon = () => {
-  console.log('Find coupon')
+const useCoupon = async () => {
+  const couponList = (await getSingleData('coupons', 'content')).list || []
+  const res = couponList.find((item) => item.code === couponCode.value)
+  if (res) {
+   discountValue.value = res.discount
+  } else {
+    $q.notify({
+      message: '查無優惠碼',
+      position: 'top-right',
+      color: 'negative'
+    })
+  }
 }
 const discountValue = ref(0)
 
-const currTotalPrice = computed(() => {
-  return orderList.value.reduce((acc, cur) => acc + (cur.onSale ?? cur.price), 0)
-})
+const currTotalPrice = computed(() => orderList.value.reduce((acc, cur) => acc + (cur.onSale > 0 ? cur.onSale : cur.price), 0))
 
-const totalPrice = computed(() => {
-  return currTotalPrice.value - discountValue.value
+const totalPrice = computed(() => currTotalPrice.value - discountValue.value)
+
+onMounted(async () => {
+  tableRow.value = (await getSingleData('cart', store.auth.uid)).list || []
 })
 
 // step2 block
@@ -99,7 +101,7 @@ const clearCreditCardInfo = () => {
   delete payInfo.value.how_to_pay.credit_card_cvc
 }
 
-const onNextBtn = () => {
+const onNextBtn = async () => {
   if (step.value === 1) {
     if (!orderList.value.length) {
       return $q.notify({
@@ -127,7 +129,15 @@ const onNextBtn = () => {
   }
 
   if (step.value === 3) {
-    console.log('串金流')
+    const data = JSON.parse(JSON.stringify(payInfo.value))
+    data.orderList = orderList.value
+    data.id = `#${Math.floor(Math.random() * 100000000)}`
+    data.total_price = totalPrice.value
+    await sendOrder(store.auth.uid, data)
+    orderList.value.forEach((item) => {
+      deleteCartOrCollection('cart', store.auth.uid, item)
+      store.UPDATE_CART_AMOUNT(store.cartAmount - 1)
+    })
   }
 
   if (step.value === 4) {
@@ -140,28 +150,23 @@ const onPrevious = () => {
     step.value--
   }
 }
-
-const { authVerifyStatus } = baseAuth()
-
-const test = () => {
-  authVerifyStatus()
-}
-console.log(store.auth)
 </script>
 
 <template>
   <QPage>
-    <QBtn label="test" @click="test()" />
     <QStepper ref="stepper" v-model="step" flat animated class="stepper-block bg-accent" header-class="q-py-lg q-px-md">
       <QStep class="q-pa-lg" icon="fa-solid fa-cart-shopping" :name="1" :title="$t('check_cart')" :done="step > 1">
         <QTable
             v-model:selected="orderList"
             hide-bottom
             selection="multiple"
-            row-key="name"
+            row-key="id"
             :columns="tableHeader"
             :rows="tableRow"
         >
+          <!-- hidden id header & body's tb -->
+          <template #header-cell-id />
+          <template #body-cell-id />
           <template #body-cell-image="props">
             <QTd :class="`text-${props.col.align}`" style="min-width: 100px;">
               <QImg class="q-pa-lg" :src="props.value" fit="contain" />
@@ -170,14 +175,14 @@ console.log(store.auth)
 
           <template #body-cell-price="props">
             <QTd :class="`text-${props.col.align}`">
-              <p v-if="props.row.onSale" class="text-negative">{{ `$NT ${props.row.onSale}` }}</p>
+              <p v-if="props.row.onSale > 0" class="text-negative">{{ `$NT ${props.row.onSale}` }}</p>
               <p v-else>{{ `$NT ${props.value}` }}</p>
             </QTd>
           </template>
 
           <template #body-cell-delete="props">
             <QTd>
-              <QBtn flat color="red" icon="fa-solid fa-trash-can" @click="deleteList(props.key)" />
+              <QBtn flat color="red" icon="fa-solid fa-trash-can" @click="deleteCartList(props.key)" />
             </QTd>
           </template>
         </QTable>
@@ -187,7 +192,7 @@ console.log(store.auth)
           <QIcon name="fa-solid fa-ticket" size="lg" color="primary" />
           <h2 class="text-size-5 q-ml-sm text-dark">{{ $t('coupon_code') }}</h2>
           <Base-input v-model="couponCode" class="q-ml-md" />
-          <QBtn class="q-ml-md" label="使用" color="primary" text-color="accent" :disable="!couponCode" @click="findCoupon()" />
+          <QBtn class="q-ml-md" label="使用" color="primary" text-color="accent" :disable="!couponCode || !orderList.length" @click="useCoupon()" />
         </div>
         <QSeparator class="q-my-xl" />
         <!-- total price block -->
@@ -250,10 +255,10 @@ console.log(store.auth)
                   </QImg>
                 </div>
                 <div class="q-mx-auto text-dark full-width" style="word-break: break-word">
-                  <p class="text-weight-medium">{{ item.name }}</p>
+                  <p class="text-weight-medium">{{ item.title }}</p>
                   <p>{{ item.size }}</p>
                 </div>
-                <div class="text-no-wrap" :class="{ 'text-negative' : item.onSale }">{{ `$NT ${item.onSale ?? item.price}` }}</div>
+                <div class="text-no-wrap" :class="{ 'text-negative' : item.onSale }">{{ `$NT ${item.onSale > 0 ? item.onSale : item.price}` }}</div>
               </QCardSection>
             </QCard>
           </div>
@@ -285,14 +290,14 @@ console.log(store.auth)
               class="q-mr-md"
               rounded
               :label="stepperNavigationPreviousLabel"
-              :to="step === 4 ? '' : ''"
+              :to="step === 4 ? '/member-area?type=order_record' : ''"
               @click="onPrevious()"
           />
           <QBtn
               color="primary"
               rounded
               :label="stepperNavigationNextLabel"
-              :to="step === 4 ? '/products' : ''"
+              :to="step === 4 ? '/products?type=all' : ''"
               @click="onNextBtn()"
           />
         </QStepperNavigation>

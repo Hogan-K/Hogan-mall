@@ -60,7 +60,7 @@ const orderInfo  = ref([])
 const myCoupons = ref([])
 
 onMounted(async () => {
-  myCoupons.value = (await getSingleData('coupons', store.auth.uid)).list || []
+  myCoupons.value = (await getSingleData('coupons', 'content')).list || []
 })
 
 // collection block

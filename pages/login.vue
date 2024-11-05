@@ -53,15 +53,11 @@ const register = async () => {
     tab.value = 1
   }
 }
-const getUserInfo = async () => {
-  const res = await getSingleData('users', store.auth.uid)
-  store.UPDATE_USERINFO(res)
-}
+
 const login = async () => {
   try {
     const toPath = useState('toPath')
     await authLogin(loginInfo.value)
-    await getUserInfo()
     sessionStorage.setItem('auth', JSON.stringify(store.auth))
     if (toPath.value) {
       return router.push({ path: toPath.value.path, query: toPath.value.query })

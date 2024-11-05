@@ -48,7 +48,7 @@ const search = () => {
     <QBtn flat round class="icon-btn q-mr-sm" icon="fa-regular fa-user" size="16px" :color="store.auth.uid ? 'primary' : 'dark'" to="/member-area?type=account" />
     <QBtn flat round class="icon-btn q-mr-sm" icon="fa-solid fa-book-bookmark" size="16px" color="dark" to="member-area?type=collection" />
     <QBtn flat dense round class="icon-btn" icon="fa-solid fa-bag-shopping" size="16px" color="dark" to="/cart">
-      <QBadge transparent floating label="1" />
+      <QBadge transparent floating :label="store.getCartAmount" />
     </QBtn>
   </QToolbar>
 </template>

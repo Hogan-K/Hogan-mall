@@ -72,7 +72,6 @@ export default function () {
     const authSignOut = (showNotify = true, routerPush) => {
         firebaseSignOut(auth).then(() => {
             store.UPDATE_AUTH({})
-            store.UPDATE_USERINFO({})
 
             if (showNotify) {
                 notify(t('sign_out_success'), 'secondary')

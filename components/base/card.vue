@@ -42,19 +42,6 @@ const addCollection = async () => {
   await addCartOrCollection('collection', store.auth.uid, productInfo.value)
   productInfo.value.isCollection = !productInfo.value.isCollection
 }
-
-const addCart = async () => {
-  if (!store.auth.uid) {
-    $q.notify({
-      message: '請先登入',
-      position: 'top-right',
-      color: 'negative'
-    })
-    return router.push({ path: '/login' })
-  }
-
-  addCartOrCollection('cart', store.auth.uid, productInfo.value)
-}
 </script>
 
 <template>
@@ -70,7 +57,6 @@ const addCart = async () => {
         </template>
       </QImg>
       </NuxtLink>
-      <QBtn class="add-cart-btn absolute absolute-center" color="secondary" :label="$t('add_cart')" @click="addCart()" />
     </QCardSection>
 
     <QCardSection class="row bg-accent text-dark">
@@ -91,22 +77,13 @@ const addCart = async () => {
 </template>
 
 <style scoped lang="scss">
-.add-cart-btn {
-  white-space: nowrap;
-  &:hover {
-    z-index: 2;
-  }
-}
-
 .card-title {
   word-break: break-word;
 }
 
 .product-img-block {
-  z-index: 1;
   transition: 0.5s;
   &:hover {
-    z-index: 0 !important;
     transform: scale(1.1);
   }
 }

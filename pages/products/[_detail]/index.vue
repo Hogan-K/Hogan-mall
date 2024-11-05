@@ -1,19 +1,25 @@
 <script setup lang="ts">
 const store = useStore()
 const route = useRoute()
-const { searchProducts, getSingleData } = baseController()
+const $q = useQuasar()
+const { searchProducts, getSingleData, addCartOrCollection } = baseController()
 
 const productInfo = ref((await searchProducts(route.params._detail))[0] || {})
 
 const productCarousel = ref(0)
 
+const getRandomInt = () => {
+  return Math.floor(Math.random() * 100000000);
+}
+
 const shoppingOrder = ref({
-  title: productInfo.value.title,
-  image: productInfo.value.image,
+  id: getRandomInt(),
+  title: productInfo.value.title || '',
+  image: productInfo.value.image || '',
   size: '',
   quantity: 1,
-  price: productInfo.value.price,
-  onSale: productInfo.value.onSale
+  price: Number(productInfo.value.price) || 0,
+  onSale: Number(productInfo.value.onSale) || 0
 })
 
 const productQuantityCounter = (type) => {
@@ -27,9 +33,7 @@ const productQuantityCounter = (type) => {
 }
 
 const getRecommendList = ref((await getSingleData('recommendation_products', 'content')).list || [])
-
 const recommendCarousel = ref('recommend-0')
-
 const recommendList = ref({})
 
 const divide = (itemLimited) => {
@@ -38,7 +42,6 @@ const divide = (itemLimited) => {
     recommendList.value[i] = getRecommendList.value.slice(i * itemLimited, i * itemLimited + itemLimited)
   }
 }
-
 onMounted(() => {
   if (store.screenWidth < 600) {
     divide(1)
@@ -50,6 +53,28 @@ onMounted(() => {
     divide(4)
   }
 })
+
+const addCart = async () => {
+  if (!store.auth.uid) {
+    $q.notify({
+      message: '請先登入',
+      position: 'top-right',
+      color: 'negative'
+    })
+    return router.push({ path: '/login' })
+  }
+
+  if (!shoppingOrder.value.size) {
+    return $q.notify({
+      message: '請選擇尺寸',
+      position: 'top-right',
+      color: 'negative'
+    })
+  }
+
+  addCartOrCollection('cart', store.auth.uid, shoppingOrder.value)
+  store.UPDATE_CART_AMOUNT(store.cartAmount + 1)
+}
 
 </script>
 
@@ -94,7 +119,7 @@ onMounted(() => {
           </div>
 
           <div class="row q-mt-md">
-            <QBtn label="加入購物車" color="primary" />
+            <QBtn label="加入購物車" color="primary" @click="addCart()" />
           </div>
         </div>
       </div>
