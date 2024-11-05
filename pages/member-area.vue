@@ -9,8 +9,7 @@ const route = useRoute()
 const router = useRouter()
 const store = useStore()
 
-const tab = ref('')
-tab.value = route.query.type?? 'account'
+const tab = ref(route.query.type?? 'account')
 watch(tab, (val) => {
   router.push({ path: route.path, query: { type: val } })
 })
@@ -56,9 +55,13 @@ const myCoupons = ref([
 ])
 
 // collection block
-const collection = ref((await getSingleData('collection', store.auth.uid)).list || [])
-collection.value.forEach((item) => {
-  item.isCollection = true
+const collection = ref([])
+
+onMounted(async () => {
+    collection.value = (await getSingleData('collection', store.auth.uid)).list || []
+    collection.value.forEach((item) => {
+      item.isCollection = true
+    })
 })
 
 // pagination
