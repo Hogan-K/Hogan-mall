@@ -42,19 +42,8 @@ const editPassword = () => {
   console.log('改密碼')
 }
 
-onMounted(async () => {
-  const currAccountInfo = await getSingleData('users', store.auth.uid)
-  accountInfo.value = {
-    name: currAccountInfo.name || '',
-    cellphone: currAccountInfo.cellphone || '',
-    email: currAccountInfo.email || '',
-    gender: currAccountInfo.gender || '',
-    birthday: currAccountInfo.birthday || ''
-  }
-})
-
 // order_record block
-const orderInfo  = ref([])
+const allOrderRecord = ref({})
 
 // coupons block
 const useCoupon = (code) => {
@@ -62,19 +51,9 @@ const useCoupon = (code) => {
   router.push({ path: '/cart' })
 }
 const myCoupons = ref([])
-onMounted(async () => {
-  myCoupons.value = (await getSingleData('coupons', 'content')).list || []
-})
 
 // collection block
 const collection = ref([])
-
-onMounted(async () => {
-    collection.value = (await getSingleData('collection', store.auth.uid)).list || []
-    collection.value.forEach((item) => {
-      item.isCollection = true
-    })
-})
 
 // pagination
 const scrollToTop = () => {
@@ -89,6 +68,26 @@ watch(page, () => {
 const totalPage = ref(Math.ceil(collection.value.length / 12) || 1)
 const showCollection = computed(() => {
   return collection.value.slice((page.value - 1) * 12, page.value * 12)
+})
+
+// init
+onMounted(async () => {
+  if (store.auth.uid) {
+    const currAccountInfo = await getSingleData('users', store.auth.uid)
+    accountInfo.value = {
+      name: currAccountInfo.name || '',
+      cellphone: currAccountInfo.cellphone || '',
+      email: currAccountInfo.email || '',
+      gender: currAccountInfo.gender || '',
+      birthday: currAccountInfo.birthday || ''
+    }
+    myCoupons.value = (await getSingleData('coupons', 'content')).list || []
+    allOrderRecord.value = (await getSingleData('order_record', store.auth.uid)) || {}
+    collection.value = (await getSingleData('collection', store.auth.uid)).list || []
+    collection.value.forEach((item) => {
+      item.isCollection = true
+    })
+  }
 })
 </script>
 
@@ -153,18 +152,22 @@ const showCollection = computed(() => {
         </QForm>
       </QTabPanel>
       <QTabPanel name="order_record">
-        <QCard class="q-mb-md">
-          <QCardSection v-for="(item, index) in orderInfo" :key="index" class="row">
+        <QCard v-for="(singleOrder, singleOrderIndex) in allOrderRecord" :key="singleOrderIndex" class="q-mb-md">
+          <QCardSection class="row">
             <div class="col-12">
-              <p>{{ `${$t('number')} : ${item.number}` }} <span class="q-ml-lg">{{ `${$t('purchase_date')} : ${item.date}` }}</span></p>
+              <p>{{ `${$t('number')} : ${singleOrder.id}` }} <span class="q-ml-lg">{{ `${$t('purchase_date')} : ${singleOrder.create_date}` }}</span></p>
             </div>
             <div class="col-4 q-pa-md">
-              <QImg :src="item.image" alt="product-image" fit="contain" height="100px" />
+              <QImg :src="singleOrder.orderList[0].image" alt="product-image" fit="contain" height="100px" />
             </div>
             <div class="col-8 flex justify-around items-center">
-              <p :class="{ 'text-warning' : item.payment_status === 'unpaid' }">{{ $t(item.payment_status) }}</p>
-              <p :class="{ 'text-warning' : item.logistics_status === 'not_shipped' }">{{ $t(item.logistics_status) }}</p>
-              <p>{{ `${$t('total_price')} : $NT ${item.total_price}` }}</p>
+              <QIcon v-if="singleOrder.how_to_pay.pay_type === '貨到付款'" color="warning" name="fa-solid fa-circle-exclamation">
+                <span class="q-ml-xs">{{ $t('unpaid') }}</span>
+              </QIcon>
+
+              <p v-else>{{ $t('paid') }}</p>
+              <QIcon color="warning" name="fa-solid fa-circle-exclamation"><span class="q-ml-xs">未出貨</span></QIcon>
+              <p>{{ `${$t('total_price')} : $NT ${singleOrder.total_price}` }}</p>
             </div>
           </QCardSection>
         </QCard>

@@ -79,10 +79,12 @@ const discountValue = ref(0)
 
 const currTotalPrice = computed(() => orderList.value.reduce((acc, cur) => acc + (cur.onSale > 0 ? cur.onSale : cur.price), 0))
 
-const totalPrice = computed(() => currTotalPrice.value - discountValue.value)
+const totalPrice = computed(() => (currTotalPrice.value - discountValue.value) > 0 ? (currTotalPrice.value - discountValue.value) : 0)
 
 onMounted(async () => {
-  tableRow.value = (await getSingleData('cart', store.auth.uid)).list || []
+  if (store.auth.uid) {
+    tableRow.value = (await getSingleData('cart', store.auth.uid)).list || []
+  }
 })
 
 // step2 block
@@ -130,10 +132,14 @@ const onNextBtn = async () => {
   }
 
   if (step.value === 3) {
+    const date = new Date()
+    const createDate = `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`
+
     const data = JSON.parse(JSON.stringify(payInfo.value))
     data.orderList = orderList.value
     data.id = `#${Math.floor(Math.random() * 100000000)}`
     data.total_price = totalPrice.value
+    data.create_date = createDate
     await sendOrder(store.auth.uid, data)
     orderList.value.forEach((item) => {
       deleteCartOrCollection('cart', store.auth.uid, item)
