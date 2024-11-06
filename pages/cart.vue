@@ -60,7 +60,8 @@ const deleteCartList = (id) => {
   store.UPDATE_CART_AMOUNT(store.cartAmount - 1)
 }
 
-const couponCode = ref(null)
+const couponCodeTemp = useState('couponCodeTemp')
+const couponCode = ref(couponCodeTemp.value ?? '')
 const useCoupon = async () => {
   const couponList = (await getSingleData('coupons', 'content')).list || []
   const res = couponList.find((item) => item.code === couponCode.value)

@@ -57,8 +57,11 @@ onMounted(async () => {
 const orderInfo  = ref([])
 
 // coupons block
+const useCoupon = (code) => {
+  const couponCodeTemp = useState('couponCodeTemp', () => code)
+  router.push({ path: '/cart' })
+}
 const myCoupons = ref([])
-
 onMounted(async () => {
   myCoupons.value = (await getSingleData('coupons', 'content')).list || []
 })
@@ -180,7 +183,7 @@ const showCollection = computed(() => {
                     <p>{{ `${$t('instructions_for_use')} : ${item.introduce}` }}</p>
                   </div>
                   <div class="col-3 bg-primary">
-                    <QBtn flat class="fit" text-color="accent" :label="$t('use')" />
+                    <QBtn flat class="fit" text-color="accent" :label="$t('use')" @click="useCoupon(item.code)" />
                   </div>
                 </div>
               </QCardSection>
