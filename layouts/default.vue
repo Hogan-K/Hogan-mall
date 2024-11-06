@@ -8,9 +8,15 @@ const drawerWidth = computed(() => {
 
 const drawerSwitch = ref(false)
 
-onMounted(async () => {
-  const cartList = (await getSingleData('cart', store.auth.uid)).list || []
-  store.UPDATE_CART_AMOUNT(cartList.length)
+const getCartAmount = async () => {
+  if (store.auth.uid) {
+    const cartList = (await getSingleData('cart', store.auth.uid)).list || []
+    store.UPDATE_CART_AMOUNT(cartList.length)
+  }
+}
+
+onMounted(() => {
+  getCartAmount()
 
   if (store.screenWidth > 600) {
     drawerSwitch.value = true
@@ -18,6 +24,10 @@ onMounted(async () => {
   window.onscroll = () => {
     store.GET_SCREEN_HEIGHT(scrollY)
   }
+})
+
+onUpdated(() => {
+  getCartAmount()
 })
 
 const scrollToTOP = () => {
