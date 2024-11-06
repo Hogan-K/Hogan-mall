@@ -8,7 +8,6 @@ export default defineNuxtRouteMiddleware((to) => {
         useState('toPath', () => to)
         const sessionAuth = sessionStorage.getItem('auth')
         onAuthStateChanged(auth, (res) => {
-            console.log(res)
             if (!res || !sessionAuth) {
                 router.push({ path: '/login' })
             }
