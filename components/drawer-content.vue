@@ -58,9 +58,7 @@ const loginStatusSwitch = async () => {
   router.push({ path: '/login' })
 }
 
-const loginStatusSwitchLabel = computed(() => {
-  return store.auth.uid ? 'sign_out' : 'login'
-})
+const loginStatusSwitchLabel = computed(() => store.auth.uid ? 'sign_out' : 'login')
 </script>
 
 <template>

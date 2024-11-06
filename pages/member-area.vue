@@ -8,6 +8,8 @@ const { required, name, cellphone, email } = baseInput()
 const route = useRoute()
 const router = useRouter()
 const store = useStore()
+const $q = useQuasar()
+const { t } = useI18n()
 
 const tab = ref(route.query.type?? 'account')
 watch(tab, (val) => {
@@ -35,7 +37,15 @@ const genderSelectOption = [
 
 const form = ref(null)
 const onSave = () => {
-  saveUserInfo(store.auth.uid, accountInfo.value)
+  if (store.auth.uid) {
+    return saveUserInfo(store.auth.uid, accountInfo.value)
+  }
+  router.push({ path: '/login' })
+  $q.notify({
+    message: t('please_login_first'),
+    position: 'top-right',
+    color: 'negative'
+  })
 }
 // TODO
 const editPassword = () => {
@@ -65,10 +75,8 @@ watch(page, () => {
   scrollToTop()
 })
 
-const totalPage = ref(Math.ceil(collection.value.length / 12) || 1)
-const showCollection = computed(() => {
-  return collection.value.slice((page.value - 1) * 12, page.value * 12)
-})
+const totalPage = computed(() => Math.ceil(collection.value.length / 12) || 1)
+const showCollection = computed(() => collection.value.slice((page.value - 1) * 12, page.value * 12))
 
 // init
 onMounted(async () => {

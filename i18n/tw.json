@@ -98,9 +98,17 @@
   "add_collection_success": "已加入我的最愛",
   "add_collection_fail": "加入我的最愛失敗",
   "get_data_fail": "取得資料失敗",
+  "search_coupon_fail": "查無優惠碼",
   "input_rule_error": "格式錯誤",
+  "previous_step": "上一步",
+  "next_step": "下一步",
+  "check_order_record": "查看訂單",
+  "checkout": "立即結帳",
+  "continue_shopping": "繼續購物",
   "required": "必填",
   "please_choose_product": "請選擇商品",
   "please_write_info_required": "請填寫必填資訊",
-  "please_enter_keyword": "請輸入關鍵字"
+  "please_enter_keyword": "請輸入關鍵字",
+  "please_login_first": "請先登入",
+  "please_choose_size": "請選擇尺寸"
 }

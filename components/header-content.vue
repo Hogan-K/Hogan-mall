@@ -14,8 +14,7 @@ const search = () => {
   $q.notify({
     message: t('please_enter_keyword'),
     position: 'top-right',
-    color: 'negative',
-    timeout: 5000
+    color: 'negative'
   })
 }
 </script>

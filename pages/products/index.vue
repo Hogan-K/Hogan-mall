@@ -20,40 +20,34 @@ const getCollectionItem = async () => {
   })
 }
 const initData = async (query) => {
-  try {
-    if (query.search) {
-      return  productList.value = await searchProducts(query.search)
-    }
+  if (query.search) {
+    return  productList.value = await searchProducts(query.search)
+  }
 
-    if (query.keyword) {
-      return productList.value = (await getSingleData('products', query.type))[query.keyword]
-    }
+  if (query.keyword) {
+    return productList.value = (await getSingleData('products', query.type))[query.keyword]
+  }
 
-    if (query.type === 'latest_products') {
-      return productList.value = (await getSingleData('recommendation_products', 'content')).list
-    }
+  if (query.type === 'latest_products') {
+    return productList.value = (await getSingleData('recommendation_products', 'content')).list
+  }
 
-    if (query.type !== 'all') {
-      const res = (await getSingleData('products', query.type))
-      const currData = []
-      for (const key in res) {
-        currData.push(...res[key])
-      }
-      productList.value = currData
-    } else {
-      productList.value = (await getSingleData('products', query.type)).list
+  if (query.type !== 'all') {
+    const res = (await getSingleData('products', query.type))
+    const currData = []
+    for (const key in res) {
+      currData.push(...res[key])
     }
-  } finally {
-    totalPage.value = Math.ceil(productList.value.length / 12)
+    productList.value = currData
+  } else {
+    productList.value = (await getSingleData('products', query.type)).list || []
   }
 }
 
 // pagination
-const totalPage = ref(1)
+const totalPage = computed(() => Math.ceil(productList.value.length / 12) || 1)
 const page = ref(1)
-const showProductList = computed(() => {
-  return productList.value.slice((page.value -1 ) * 12, page.value * 12)
-})
+const showProductList = computed(() => productList.value.slice((page.value -1 ) * 12, page.value * 12))
 const scrollToTop = () => {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }

@@ -2,6 +2,7 @@
 const store = useStore()
 const route = useRoute()
 const $q = useQuasar()
+const { t } = useI18n()
 const { searchProducts, getSingleData, addCartOrCollection } = baseController()
 
 const productInfo = ref((await searchProducts(route.params._detail))[0] || {})
@@ -57,7 +58,7 @@ onMounted(() => {
 const addCart = async () => {
   if (!store.auth.uid) {
     $q.notify({
-      message: '請先登入',
+      message: t('please_login_first'),
       position: 'top-right',
       color: 'negative'
     })
@@ -66,7 +67,7 @@ const addCart = async () => {
 
   if (!shoppingOrder.value.size) {
     return $q.notify({
-      message: '請選擇尺寸',
+      message: t('please_choose_size'),
       position: 'top-right',
       color: 'negative'
     })

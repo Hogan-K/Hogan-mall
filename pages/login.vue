@@ -2,7 +2,7 @@
 const router = useRouter()
 const store = useStore()
 const { required, name, email } = baseInput()
-const { saveUserInfo, getSingleData } = baseController()
+const { saveUserInfo } = baseController()
 const { authRegister, authLogin, authEmailVerify, authSignOut } = baseAuth()
 const $q = useQuasar()
 const { t } = useI18n()

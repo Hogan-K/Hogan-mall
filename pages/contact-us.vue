@@ -17,7 +17,7 @@ const contactData = {
   <QPage>
     <Base-guide-map />
     <div class="bg-dark flex justify-center items-end q-pb-md" style="height: 200px;">
-      <h1 class="text-accent text-size-10 text-weight-medium">與我們聯繫</h1>
+      <h1 class="text-accent text-size-10 text-weight-medium">{{ $t('contact_us') }}</h1>
     </div>
 
     <div class="row justify-center q-mt-lg">

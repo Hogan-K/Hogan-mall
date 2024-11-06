@@ -19,13 +19,14 @@ const { addCartOrCollection, deleteCartOrCollection } = baseController()
 const store = useStore()
 const router = useRouter()
 const $q = useQuasar()
+const { t } = useI18n()
 
 const productInfo = computed(() => props.productInfo)
 
 const addCollection = async () => {
   if (!store.auth.uid) {
     $q.notify({
-      message: '請先登入',
+      message: t('please_login_first'),
       position: 'top-right',
       color: 'negative'
     })

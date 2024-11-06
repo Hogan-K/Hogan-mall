@@ -13,15 +13,15 @@ const showPreviousBtn = computed(() => {
 })
 const stepperNavigationNextLabel = computed(() => {
   const status = {
-    1: '下一步',
-    2: '下一步',
-    3: '立即結帳',
-    4: '繼續購物'
+    1: t('next_step'),
+    2: t('next_step'),
+    3: t('checkout'),
+    4: t('continue_shopping')
   }
   return status[step.value]
 })
 const stepperNavigationPreviousLabel = computed(() => {
-  return step.value === 4 ? '查看訂單': '上一步'
+  return step.value === 4 ? t('check_order_record'): t('previous_step')
 })
 
 // step1 block
@@ -69,7 +69,7 @@ const useCoupon = async () => {
    discountValue.value = res.discount
   } else {
     $q.notify({
-      message: '查無優惠碼',
+      message: t('search_coupon_fail'),
       position: 'top-right',
       color: 'negative'
     })

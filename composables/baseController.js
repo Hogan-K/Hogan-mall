@@ -9,7 +9,8 @@ export default function () {
         $q.notify({
             message,
             position: 'top-right',
-            color
+            color,
+            badgeColor: color
         })
     }
 
