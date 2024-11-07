@@ -1,12 +1,14 @@
-<script setup lang="ts">
+<script setup>
 const store = useStore()
 const { getSingleData } = baseController()
 
-const drawerWidth = computed(() => {
-  return store.screenWidth > 600 ? 250 : 330
-})
+const drawerWidth = computed(() => store.screenWidth > 600 ? 250 : 330)
 
 const drawerSwitch = ref(false)
+
+const scrollToTOP = () => {
+  window.scrollTo({ top: 0, behavior: 'smooth' })
+}
 
 const getCartAmount = async () => {
   if (store.auth.uid) {
@@ -29,10 +31,6 @@ onMounted(() => {
 onUpdated(() => {
   getCartAmount()
 })
-
-const scrollToTOP = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' })
-}
 </script>
 
 <template>

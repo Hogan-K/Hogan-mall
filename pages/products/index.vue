@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 const route = useRoute()
 const store = useStore()
 const { getSingleData, searchProducts } = baseController()
@@ -6,7 +6,7 @@ const { getSingleData, searchProducts } = baseController()
 const productList = ref([])
 
 const getCollectionItem = async () => {
-  const collectionList = (await getSingleData('collection', store.auth.uid)).list
+  const collectionList = (await getSingleData('collection', store.auth.uid)).list || []
   const collectionMap = collectionList.reduce((acc, cur) => {
     acc[cur.title] = cur
     return acc
@@ -57,9 +57,11 @@ watch(page, () => {
 
 // init
 initData(route.query)
-if (store.auth.uid) {
-  getCollectionItem()
-}
+onMounted(() => {
+  if (store.auth.uid) {
+    getCollectionItem()
+  }
+})
 
 watch(() => route, ({ query }) => {
   page.value = 1

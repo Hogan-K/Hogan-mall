@@ -1,9 +1,9 @@
-<script setup lang="ts">
+<script setup>
 const router = useRouter()
 const store = useStore()
 const { required, name, email } = baseInput()
 const { saveUserInfo } = baseController()
-const { authRegister, authLogin, authEmailVerify, authSignOut } = baseAuth()
+const { authRegister, authLogin, authEmailVerify, authSignOut, googleRedirectLogin, getGoogleRedirectLoginResult } = baseAuth()
 const $q = useQuasar()
 const { t } = useI18n()
 
@@ -17,13 +17,13 @@ const registerInputList = ref([
   { title: 'check_password', rules: [required] }
 ])
 const quickLoginAndRegisterBtn = [
-  { icon: 'fa-brands fa-facebook', onClick: () => '' },
-  { icon: 'fa-brands fa-google', onClick: () => '' },
+  // { icon: 'fa-brands fa-facebook', onClick: () => '' },
+  { icon: 'fa-brands fa-google', onClick: () => googleRedirectLogin() },
   { icon: 'fa-regular fa-envelope', onClick: () => tab.value = 2 }
 ]
 const quickLoginAndLoginBtn = [
-  { icon: 'fa-brands fa-facebook', onClick: () => '' },
-  { icon: 'fa-brands fa-google', onClick: () => '' },
+  // { icon: 'fa-brands fa-facebook', onClick: () => '' },
+  { icon: 'fa-brands fa-google', onClick: () => googleRedirectLogin() },
   { icon: 'fa-regular fa-user', onClick: () => tab.value = 1 }
 ]
 
@@ -67,6 +67,16 @@ const login = async () => {
     console.log(err)
   }
 }
+
+onMounted(async () => {
+  const loginMethod = sessionStorage.getItem('login_method')
+  if (loginMethod === 'google') {
+    await getGoogleRedirectLoginResult()
+    sessionStorage.setItem('auth', JSON.stringify(store.auth))
+    sessionStorage.removeItem('login_method')
+    router.push({ path: '/' })
+  }
+})
 </script>
 
 <template>

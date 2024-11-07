@@ -5,7 +5,11 @@ import {
     onAuthStateChanged,
     signOut as firebaseSignOut,
     deleteUser as firebaseDeleteUser,
-    sendEmailVerification
+    sendEmailVerification,
+    signInWithPopup,
+    GoogleAuthProvider,
+    signInWithRedirect,
+    getRedirectResult
 } from "firebase/auth"
 
 export default function () {
@@ -14,6 +18,7 @@ export default function () {
     const store = useStore()
     const router = useRouter()
     const auth = getAuth()
+    const provider = new GoogleAuthProvider()
 
     const notify = (message, color = 'negative') => {
         $q.notify({
@@ -21,6 +26,33 @@ export default function () {
             position: 'top-right',
             color,
             badgeColor: color
+        })
+    }
+
+    // Google 登入-彈窗
+    const googleDialogLogin = () => {
+        return signInWithPopup(auth, provider).then((res) => {
+            store.UPDATE_AUTH(res.user)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    // Google 登入-導頁
+    const googleRedirectLogin = () => {
+        sessionStorage.setItem('login_method', 'google')
+        signInWithRedirect(auth, provider)
+    }
+
+    const getGoogleRedirectLoginResult = () => {
+        return getRedirectResult(auth).then((res) => {
+            console.log(res)
+            if (res) {
+                store.UPDATE_AUTH(res.user)
+                notify(t('login_success'), 'secondary')
+            }
+        }).catch((err) => {
+            console.log(err)
         })
     }
 
@@ -106,6 +138,9 @@ export default function () {
         authVerifyStatus,
         authSignOut,
         authDeleteUser,
-        authEmailVerify
+        authEmailVerify,
+        googleDialogLogin,
+        googleRedirectLogin,
+        getGoogleRedirectLoginResult
     }
 }
