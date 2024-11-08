@@ -72,6 +72,9 @@ onMounted(async () => {
   const loginMethod = sessionStorage.getItem('login_method')
   if (loginMethod === 'google') {
     await getGoogleRedirectLoginResult()
+    await saveUserInfo(store.auth.uid, {
+      email: store.auth.email
+    })
     sessionStorage.setItem('auth', JSON.stringify(store.auth))
     sessionStorage.removeItem('login_method')
     router.push({ path: '/' })

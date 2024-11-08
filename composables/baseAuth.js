@@ -46,7 +46,6 @@ export default function () {
 
     const getGoogleRedirectLoginResult = () => {
         return getRedirectResult(auth).then((res) => {
-            console.log(res)
             if (res) {
                 store.UPDATE_AUTH(res.user)
                 notify(t('login_success'), 'secondary')

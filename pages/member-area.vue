@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 definePageMeta({
   middleware: 'auth'
 })
@@ -46,10 +46,6 @@ const onSave = () => {
     position: 'top-right',
     color: 'negative'
   })
-}
-// TODO
-const editPassword = () => {
-  console.log('改密碼')
 }
 
 // order_record block
@@ -136,6 +132,17 @@ onMounted(async () => {
                   </q-icon>
                 </template>
               </QInput>
+              <QInput
+                  v-else-if="key === 'email'"
+                  v-model="accountInfo[key]"
+                  outlined
+                  rounded
+                  dense
+                  disable
+                  width="300px"
+                  :label="$t(key)"
+                  :rules="[required, rules[key]]"
+              />
               <QSelect
                   v-else-if="key === 'gender'"
                   v-model="accountInfo[key]"
@@ -155,7 +162,6 @@ onMounted(async () => {
               />
             </template>
             <QBtn class="full-width" color="primary" type="submit" :label="$t('save')" />
-            <QBtn flat class="float-right" color="secondary" :label="$t('change_password')" @click="editPassword()" />
           </div>
         </QForm>
       </QTabPanel>
