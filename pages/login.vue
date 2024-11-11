@@ -53,11 +53,11 @@ const register = async () => {
 
 const login = async () => {
   try {
-    const toPath = useState('toPath')
+    const fromPath = sessionStorage.getItem('from_path')
     await authLogin(loginInfo.value)
     sessionStorage.setItem('auth', JSON.stringify(store.auth))
-    if (toPath.value) {
-      return router.push({ path: toPath.value.path, query: toPath.value.query })
+    if (fromPath) {
+      return router.push(fromPath)
     }
     router.push({ path: '/' })
   } catch (err) {

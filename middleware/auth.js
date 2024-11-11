@@ -5,7 +5,7 @@ export default defineNuxtRouteMiddleware((to) => {
     const auth = getAuth()
 
     if (import.meta.client) {
-        useState('toPath', () => to)
+        sessionStorage.setItem('from_path', to.fullPath)
         const sessionAuth = sessionStorage.getItem('auth')
         onAuthStateChanged(auth, (res) => {
             if (!res || !sessionAuth) {
