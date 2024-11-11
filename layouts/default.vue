@@ -26,6 +26,11 @@ onMounted(() => {
   window.onscroll = () => {
     store.GET_SCREEN_HEIGHT(scrollY)
   }
+
+  store.GET_SCREEN_WIDTH(window.innerWidth)
+  window.onresize = (val) => {
+    store.GET_SCREEN_WIDTH(val.target.innerWidth)
+  }
 })
 
 onUpdated(() => {

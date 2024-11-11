@@ -6,11 +6,6 @@ onMounted(() => {
   if (sessionAuth) {
     store.UPDATE_AUTH(sessionAuth)
   }
-
-  store.GET_SCREEN_WIDTH(window.innerWidth)
-  window.onresize = (val) => {
-    store.GET_SCREEN_WIDTH(val.target.innerWidth)
-  }
 })
 </script>
 
