@@ -41,6 +41,11 @@ const tableRow = ref([])
 // 訂單清單
 const orderList = ref([])
 
+const getCartAmount = async () => {
+  const cartList = (await getSingleData('cart', store.auth.uid)).list || []
+  store.UPDATE_CART_AMOUNT(cartList.length)
+}
+
 const deleteList = (array, id) => {
   const currDeleteIndex = array.findIndex((item) => {
     return item.id === id
@@ -57,7 +62,7 @@ const deleteList = (array, id) => {
 const deleteCartList = (id) => {
   deleteList(orderList.value, id)
   deleteList(tableRow.value, id)
-  store.UPDATE_CART_AMOUNT(store.cartAmount - 1)
+  getCartAmount()
 }
 
 const couponCodeTemp = useState('couponCodeTemp')
