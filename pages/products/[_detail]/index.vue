@@ -55,6 +55,11 @@ onMounted(() => {
   }
 })
 
+const getCartAmount = async () => {
+  const cartList = (await getSingleData('cart', store.auth.uid)).list || []
+  store.UPDATE_CART_AMOUNT(cartList.length)
+}
+
 const addCart = async () => {
   if (!store.auth.uid) {
     $q.notify({
@@ -73,8 +78,8 @@ const addCart = async () => {
     })
   }
 
-  addCartOrCollection('cart', store.auth.uid, shoppingOrder.value)
-  store.UPDATE_CART_AMOUNT(store.cartAmount + 1)
+  await addCartOrCollection('cart', store.auth.uid, shoppingOrder.value)
+  getCartAmount()
   shoppingOrder.value.id = getRandomInt()
 }
 

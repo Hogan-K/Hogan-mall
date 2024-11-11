@@ -32,10 +32,6 @@ onMounted(() => {
     store.GET_SCREEN_WIDTH(val.target.innerWidth)
   }
 })
-
-onUpdated(() => {
-  getCartAmount()
-})
 </script>
 
 <template>
