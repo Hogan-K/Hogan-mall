@@ -2,10 +2,8 @@ import {
     getAuth,
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    onAuthStateChanged,
     signOut as firebaseSignOut,
     deleteUser as firebaseDeleteUser,
-    sendEmailVerification,
     signInWithPopup,
     GoogleAuthProvider,
     signInWithRedirect,
@@ -79,27 +77,6 @@ export default function () {
         }
     }
 
-    // email 驗證信
-    const authEmailVerify = () => {
-        sendEmailVerification(store.auth).then(() => {
-            notify(t('sendEmailVerify_success'), 'secondary')
-        }).catch((err) => {
-            console.log(err)
-            notify(t('sendEmailVerify_fail'))
-        })
-    }
-
-    // 驗證登入狀態
-    const authVerifyStatus = () => {
-        try {
-            onAuthStateChanged(auth, (res) => {
-                console.log(res)
-            })
-        } catch (err) {
-            console.log(err)
-        }
-    }
-
     // 登出
     const authSignOut = (showNotify = true, routerPush) => {
         firebaseSignOut(auth).then(() => {
@@ -134,10 +111,8 @@ export default function () {
     return {
         authRegister,
         authLogin,
-        authVerifyStatus,
         authSignOut,
         authDeleteUser,
-        authEmailVerify,
         googleDialogLogin,
         googleRedirectLogin,
         getGoogleRedirectLoginResult
